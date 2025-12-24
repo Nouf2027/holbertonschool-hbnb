@@ -1,9 +1,5 @@
 # 0. High-Level Package Diagram
 
-
-<img width="1000" height="750" alt="Image" src="https://github.com/user-attachments/assets/8b41d69b-ac76-4a44-9a91-39b5388a6ced" />
-
-
 ## UML Package Diagram
 
 ```mermaid
