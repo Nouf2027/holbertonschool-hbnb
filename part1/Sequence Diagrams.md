@@ -1,6 +1,6 @@
 ## 1. User Registration
 
-```mermaid (
+```mermaid 
 sequenceDiagram
     autonumber
     actor User
@@ -38,7 +38,7 @@ sequenceDiagram
 
     deactivate BL
     deactivate API
-)
+end
 
 ## Explanation
 
