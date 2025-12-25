@@ -1,12 +1,3 @@
-
-# Sequence Diagrams for API Calls
-
-
-
-# Sequence Diagrams for API Calls
-
-## 1. User Registration
-
 ```mermaid
 sequenceDiagram
     actor User
@@ -14,18 +5,12 @@ sequenceDiagram
     participant BL as BusinessLogic
     participant DB as Database
 
-    User->>API: Register user (email, password)
-    API->>BL: Validate and process input
-
-    alt Valid input
-        BL->>DB: Store user data
-        DB-->>BL: Confirm save
-        BL-->>API: Success
-        API-->>User: Registration successful
-    else Invalid input
-        BL-->>API: Validation error
-        API-->>User: Registration failed
-    end
+    User->>API: Register user
+    API->>BL: Validate data
+    BL->>DB: Save user
+    DB-->>BL: OK
+    BL-->>API: Success
+    API-->>User: Done
 
 ## Explanation
 
