@@ -14,7 +14,8 @@
  - The request is validated and processed.
  - The place is stored in the database.
  - A response is returned indicating success or failure.
-<img width="3092" height="4668" alt="image" src="https://github.com/user-attachments/assets/1559989b-5ba0-4fbc-9eb1-fd4b84fe27c3" />
+   <img width="1350" height="552" alt="image" src="https://github.com/user-attachments/assets/7b6bbac1-debd-4c4f-8c20-139f481b735f" />
+
 ## Explanation
  - The user submits a review.
  - The review is validated and stored.
