@@ -5,7 +5,7 @@ sequenceDiagram
     autonumber
     actor User
     participant API
-    participant BL as Business Logic
+    participant BL as BusinessLogic
     participant DB as Database
 
     Note over User,API: User enters email and password
@@ -16,10 +16,7 @@ sequenceDiagram
     API->>BL: Check registration data
     activate BL
 
-    Note right of BL: 
-    - Check required fields
-    - Check email format
-    - Check password rules
+    Note right of BL: Check required fields \n Check email format \n Check password rules
 
     BL->>DB: Check if user exists
     activate DB
