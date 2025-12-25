@@ -35,23 +35,17 @@
  - The retrieved data is sent back through the API and displayed to the user.
 
 
+```mermaid
 sequenceDiagram
-    autonumber
     actor User
     participant API
     participant BL as BusinessLogic
     participant DB as Database
 
-    User->>API: Register User (email, password, etc.)
-    API->>BL: Validate & process registration
-    BL->>BL: Check required fields + password rules
-
-    alt Invalid data
-        BL-->>API: Validation failed (400)
-        API-->>User: Registration failed (error message)
-    else Valid data
-        BL->>DB: Store user data
-        DB-->>BL: Confirm save
-        BL-->>API: Return success (201)
-        API-->>User: Registration successful
-    end
+    User->>API: Register user
+    API->>BL: Validate data
+    BL->>DB: Save user
+    DB-->>BL: Confirm save
+    BL-->>API: Success
+    API-->>User: Registration successful
+```
