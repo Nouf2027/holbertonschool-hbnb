@@ -1,36 +1,34 @@
 # Task 0: High-Level Package Diagram
 
-## Objective
-The objective of this task is to create a high-level package diagram that illustrates the three-layer architecture of the HBnB application and the communication between these layers using the Facade design pattern.
-
-## Overview
-The HBnB application follows a layered architecture that separates concerns into three main layers:
-the Presentation Layer, the Business Logic Layer, and the Persistence Layer.
-This design improves maintainability, scalability, and clarity of the system.
-
-## High-Level Package Diagram
+## High-Level Diagram (Boxes + Arrows style)
 
 ```mermaid
-flowchart LR
+classDiagram
+direction TB
 
-subgraph Presentation_Layer [Presentation Layer]
-    API[API / Services]
-end
+class PresentationLayer {
+  <<Interface>>
+  +ServiceAPI
+  +handleRequests()
+}
 
-subgraph Business_Logic_Layer [Business Logic Layer]
-    Facade[HBnBFacade]
-    Models[User, Place, Review, Amenity]
-end
+class BusinessLogicLayer {
+  +User
+  +Place
+  +Review
+  +Amenity
+  +HBnBFacade
+  +processLogic()
+}
 
-subgraph Persistence_Layer [Persistence Layer]
-    Repo[Repositories]
-    DB[(Database)]
-end
+class PersistenceLayer {
+  +DatabaseAccess
+  +saveData()
+  +retrieveData()
+}
 
-API --> Facade
-Facade --> Models
-Facade --> Repo
-Repo --> DB
+PresentationLayer --> BusinessLogicLayer : Facade Pattern
+BusinessLogicLayer --> PersistenceLayer : Database Operations
 ```
 ## Explanatory Notes
 
