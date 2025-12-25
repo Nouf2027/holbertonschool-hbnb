@@ -1,27 +1,36 @@
 ## Place Order – Sequence Diagram
 
-```mermaid
 sequenceDiagram
-    actor Client
-    participant Order
-    participant Account
-    actor Manager
+    actor User
+    participant API
+    participant BL as BusinessLogic
+    participant DB as Database
 
-    Client->>Order: Place Order
+    User->>API: POST /register (user data)
+    activate API
+    API->>BL: Validate & Process Request
+    activate BL
+    
+    BL->>DB: Check if email exists
+    activate DB
+    DB-->>BL: Result (Exists/Not Exists)
+    deactivate DB
 
-    alt amount < 100
-        Order->>Account: Check credit
-        Account-->>Order: Credit OK
-    else 100 <= amount < 1000
-        Order->>Account: Check credit limit
-        Account-->>Order: Credit Good
-    else amount >= 1000
-        Order->>Manager: Request approval
-        Manager-->>Order: Approval given
+    alt Email already registered
+        BL-->>API: Conflict Error
+        API-->>User: 409 Conflict (Email taken)
+    else Email is unique
+        BL->>DB: Store new user profile
+        activate DB
+        DB-->>BL: Success (User ID)
+        deactivate DB
+        
+        BL-->>API: User Created
+        API-->>User: 201 Created (User Object)
     end
 
-    Order-->>Client: Confirm Order
-
+    deactivate BL
+    deactivate API
 
 ## Explanation
 
