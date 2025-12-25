@@ -1,24 +1,26 @@
-## 1. User Registration
+## Place Order – Sequence Diagram
 
 ```mermaid
 sequenceDiagram
-    actor User
-    participant API
-    participant BL as BusinessLogic
-    participant DB as Database
+    actor Client
+    participant Order
+    participant Account
+    actor Manager
 
-    User->>API: Register user (email, password, etc.)
-    API->>BL: Validate and process request
+    Client->>Order: Place Order
 
-    alt Valid input
-        BL->>DB: Store user data
-        DB-->>BL: Confirm save
-        BL-->>API: Success
-        API-->>User: Registration successful
-    else Invalid input
-        BL-->>API: Validation error
-        API-->>User: Registration failed
+    alt amount < 100
+        Order->>Account: Check credit
+        Account-->>Order: Credit OK
+    else 100 <= amount < 1000
+        Order->>Account: Check credit limit
+        Account-->>Order: Credit Good
+    else amount >= 1000
+        Order->>Manager: Request approval
+        Manager-->>Order: Approval given
     end
+
+    Order-->>Client: Confirm Order
 
 
 ## Explanation
