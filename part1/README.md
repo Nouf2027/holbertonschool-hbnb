@@ -1,65 +1,95 @@
-# Task 0: High-Level Package Diagram
+# Task 0: High-Level Package Diagram (HBnB)
 
-## Diagram
+## High-Level Package Diagram 
 
 ```mermaid
-flowchart TB
-  %% =========================
-  %% Presentation Layer
-  %% =========================
-  subgraph Presentation["Presentation Layer (Services / API)"]
-    API["API Endpoints"]
-    Services["Services / Controllers"]
-  end
+classDiagram
+direction LR
 
-  %% =========================
-  %% Business Logic Layer
-  %% =========================
-  subgraph Business["Business Logic Layer (Models)"]
-    Facade["HBnBFacade (Facade Interface)"]
-    User["User"]
-    Place["Place"]
-    Review["Review"]
-    Amenity["Amenity"]
-  end
+%% =========================
+%% Presentation Layer
+%% =========================
+namespace presentation {
+  class API {
+    <<Service>>
+    +handleRequest()
+  }
 
-  %% =========================
-  %% Persistence Layer
-  %% =========================
-  subgraph Persistence["Persistence Layer"]
-    Repo["Repositories / DAO"]
-    DB[(Database)]
-  end
+  class Services {
+    <<Service>>
+    +validateInput()
+    +formatResponse()
+  }
+}
 
-  %% =========================
-  %% Communication Pathways
-  %% =========================
-  API --> Facade
-  Services --> Facade
+%% =========================
+%% Business Logic Layer
+%% =========================
+namespace business {
+  class HBnBFacade {
+    <<Facade>>
+    +createUser()
+    +createPlace()
+    +createReview()
+    +listAmenities()
+  }
 
-  Facade --> User
-  Facade --> Place
-  Facade --> Review
-  Facade --> Amenity
+  class User
+  class Place
+  class Review
+  class Amenity
+}
 
-  Facade --> Repo
-  Repo --> DB
+%% =========================
+%% Persistence Layer
+%% =========================
+namespace persistence {
+  class Repository {
+    <<Repository>>
+    +save()
+    +getById()
+    +list()
+    +delete()
+  }
+
+  class Database {
+    <<Database>>
+  }
+}
+
+%% =========================
+%% Relationships / Communication
+%% =========================
+
+presentation.API --> presentation.Services : uses
+presentation.Services --> business.HBnBFacade : calls (Facade)
+
+business.HBnBFacade --> business.User : manages
+business.HBnBFacade --> business.Place : manages
+business.HBnBFacade --> business.Review : manages
+business.HBnBFacade --> business.Amenity : manages
+
+business.HBnBFacade --> persistence.Repository : data access
+persistence.Repository --> persistence.Database : CRUD
 ```
 ## Explanatory Notes
 
 ### Presentation Layer (Services / API)
 This layer represents the entry point of the system.
-It exposes API endpoints and services that receive client requests and forward them to the business logic layer through the facade.
+It exposes API endpoints and services that handle client requests.
+Requests are validated and forwarded to the Business Logic Layer through the Facade.
 
 ### Business Logic Layer (Models)
-This layer contains the core business rules and the domain models (User, Place, Review, Amenity).
-It also includes the HBnBFacade, which provides a unified interface used by the presentation layer.
+This layer contains the core business rules and domain models such as User, Place, Review, and Amenity.
+It also includes the HBnBFacade, which acts as a unified interface between the Presentation Layer and the internal system components.
 
 ### Persistence Layer
 This layer is responsible for data storage and retrieval.
-It interacts with the database through repositories or data access objects.
+It communicates with the database through repositories or data access objects.
+This layer is accessed only by the Business Logic Layer.
 
 ### Facade Pattern
-The Facade pattern simplifies communication between layers by providing a single access point to the business logic.
-This reduces coupling between layers and improves maintainability and clarity of the architecture.
+The Facade Pattern provides a single access point to the Business Logic Layer.
+It simplifies communication between layers and hides internal implementation details.
+This approach reduces coupling and improves maintainability, scalability, and clarity of the system architecture.
 
