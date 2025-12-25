@@ -9,6 +9,7 @@
  - A confirmation is returned back through the layers to the user.
 <img width="3004" height="1348" alt="image" src="https://github.com/user-attachments/assets/b340e5c5-82dd-451e-a1a6-c3ab07d7c4d5" />
 ## Explanation
+
  - The user submits place information.
  - The request is validated and processed.
  - The place is stored in the database.
