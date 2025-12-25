@@ -8,9 +8,9 @@ sequenceDiagram
     User->>API: Register user
     API->>BL: Validate data
     BL->>DB: Save user
-    DB-->>BL: OK
+    DB-->>BL: Confirm save
     BL-->>API: Success
-    API-->>User: Done
+    API-->>User: Registration successful
 
 ## Explanation
 
