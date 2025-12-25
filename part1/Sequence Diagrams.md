@@ -2,6 +2,16 @@
 # Sequence Diagrams for API Calls
 
 
+# Sequence Diagrams for API Calls
+
+## Objective
+These sequence diagrams describe the time-ordered interaction between the User, API (Presentation layer), Business Logic layer, and Database (Persistence layer) for common API calls in the HBnB system.
+
+---
+
+## 1. User Registration
+
+```mermaid
 sequenceDiagram
     actor User
     participant API
@@ -9,22 +19,17 @@ sequenceDiagram
     participant DB as Database
 
     User->>API: Register user (email, password)
-    activate API
+    API->>BL: Validate and process input
 
-    API->>BL: Validate user data
-    activate BL
-
-    BL->>DB: Save user
-    activate DB
-
-    DB-->>BL: Confirm save
-    deactivate DB
-
-    BL-->>API: Success
-    deactivate BL
-
-    API-->>User: Registration successful
-    deactivate API
+    alt Valid input
+        BL->>DB: Store user data
+        DB-->>BL: Confirm save
+        BL-->>API: Success
+        API-->>User: Registration successful
+    else Invalid input
+        BL-->>API: Validation error
+        API-->>User: Registration failed
+    end
     
 ## Explanation
 
