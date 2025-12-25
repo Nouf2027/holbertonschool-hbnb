@@ -3,10 +3,7 @@
 
 
 
-## Objective
-These sequence diagrams describe the time-ordered interaction between the User, API (Presentation layer), Business Logic layer, and Database (Persistence layer) for common API calls in the HBnB system.
-
----
+# Sequence Diagrams for API Calls
 
 ## 1. User Registration
 
@@ -28,15 +25,7 @@ sequenceDiagram
     else Invalid input
         BL-->>API: Validation error
         API-->>User: Registration failed
-    
-    
-## Explanation
-
- - The user sends registration information to the API.
- - The API forwards the request to the business logic layer for validation.
- - The business logic stores the user data in the database.
- - A confirmation is returned back through the layers to the user.
-<img width="3004" height="1348" alt="image" src="https://github.com/user-attachments/assets/1a967759-527d-4328-ab95-81faea583e92" />
+    end
 
 ## Explanation
 
