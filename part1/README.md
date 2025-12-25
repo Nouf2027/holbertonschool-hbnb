@@ -1,13 +1,20 @@
 # Task 0: High-Level Package Diagram
 
 ## Diagram
+
 ```mermaid
 flowchart TB
+  %% =========================
+  %% Presentation Layer
+  %% =========================
   subgraph Presentation["Presentation Layer (Services / API)"]
     API["API Endpoints"]
     Services["Services / Controllers"]
   end
 
+  %% =========================
+  %% Business Logic Layer
+  %% =========================
   subgraph Business["Business Logic Layer (Models)"]
     Facade["HBnBFacade (Facade Interface)"]
     User["User"]
@@ -16,11 +23,17 @@ flowchart TB
     Amenity["Amenity"]
   end
 
+  %% =========================
+  %% Persistence Layer
+  %% =========================
   subgraph Persistence["Persistence Layer"]
     Repo["Repositories / DAO"]
     DB[(Database)]
   end
 
+  %% =========================
+  %% Communication Pathways
+  %% =========================
   API --> Facade
   Services --> Facade
 
