@@ -1,8 +1,7 @@
 
 # Sequence Diagrams for API Calls
-```mermaid
 sequenceDiagram
-    participant User
+    actor User
     participant API
     participant BL as BusinessLogic
     participant DB as Database
@@ -13,18 +12,19 @@ sequenceDiagram
     API->>BL: Validate user data
     activate BL
 
-    BL->>DB: Save user
-    activate DB
+    alt Data is valid
+        BL->>DB: Save user
+        activate DB
+        DB-->>BL: User saved
+        deactivate DB
+        BL-->>API: Success
+    else Data is invalid
+        BL-->>API: Validation error
+    end
 
-    DB-->>BL: Confirm save
-    deactivate DB
-
-    BL-->>API: Success / Failure
     deactivate BL
-
     API-->>User: Registration result
     deactivate API
-```
 
 ## Explanation
 
