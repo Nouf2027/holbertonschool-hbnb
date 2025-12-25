@@ -1,6 +1,10 @@
 
 # Sequence Diagrams for API Calls
 
+# Sequence Diagrams for API Calls
+
+## 1. User Registration
+
 ```mermaid
 sequenceDiagram
     actor User
@@ -9,27 +13,17 @@ sequenceDiagram
     participant DB as Database
 
     User->>API: Register user (email, password)
-    activate API
-
-    API->>BL: Validate user data
-    activate BL
+    API->>BL: Validate and process request
 
     alt Data is valid
-        BL->>DB: Save user
-        activate DB
-        DB-->>BL: User saved
-        deactivate DB
-
-        BL-->>API: Success
+        BL->>DB: Store user data
+        DB-->>BL: Confirm save
+        BL-->>API: Return success
+        API-->>User: Registration successful
     else Data is invalid
-        BL-->>API: Validation error
+        BL-->>API: Return failure
+        API-->>User: Registration error
     end
-
-    deactivate BL
-
-    API-->>User: Registration result (Success / Error)
-    deactivate API
-
 ## Explanation
 
  - The user sends registration information to the API.
