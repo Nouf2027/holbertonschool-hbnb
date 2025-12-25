@@ -39,7 +39,8 @@ sequenceDiagram
     deactivate BL
     deactivate API
 
-## Explanation
+
+Explanation
 
 	•	The user enters an email and password to create a new account.
 	•	The API receives the registration data from the user.
