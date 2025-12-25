@@ -1,16 +1,21 @@
-```mermaid
 sequenceDiagram
     actor User
     participant API
     participant BL as BusinessLogic
     participant DB as Database
 
-    User->>API: Register user
-    API->>BL: Validate data
-    BL->>DB: Save user
-    DB-->>BL: Confirm save
-    BL-->>API: Success
-    API-->>User: Registration successful
+    User->>API: Register(email, password, details)
+    API->>BL: Validate & Process Registration
+    alt Success: Data is valid
+        BL->>DB: Save User Data
+        DB-->>BL: User Created
+        BL-->>API: Registration Success
+        API-->>User: 201 Created (User Object)
+    else Failure: Email already exists / Invalid data
+        BL-->>API: Registration Error
+        API-->>User: 400 Bad Request / 409 Conflict
+    end
+
 
 ## Explanation
 
