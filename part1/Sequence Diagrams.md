@@ -57,17 +57,34 @@ sequenceDiagram
  - The retrieved data is sent back through the API and displayed to the user.
 
 
-```mermaid
 sequenceDiagram
     actor User
     participant API
     participant BL as BusinessLogic
     participant DB as Database
 
-    User->>API: Register user
-    API->>BL: Validate data
-    BL->>DB: Save user
-    DB-->>BL: Confirm save
-    BL-->>API: Success
-    API-->>User: Registration successful
-```
+    User->>API: POST /register (user data)
+    activate API
+    API->>BL: Validate & Process Request
+    activate BL
+    
+    BL->>DB: Check if email exists
+    activate DB
+    DB-->>BL: Result (Exists/Not Exists)
+    deactivate DB
+
+    alt Email already registered
+        BL-->>API: Conflict Error
+        API-->>User: 409 Conflict (Email taken)
+    else Email is unique
+        BL->>DB: Store new user profile
+        activate DB
+        DB-->>BL: Success (User ID)
+        deactivate DB
+        
+        BL-->>API: User Created
+        API-->>User: 201 Created (User Object)
+    end
+
+    deactivate BL
+    deactivate API
