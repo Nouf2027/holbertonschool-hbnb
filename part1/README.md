@@ -6,57 +6,94 @@
 classDiagram
 direction TB
 
-namespace PresentationLayer {
-  class API_Routes
-  class RequestHandlers
+%% =======================
+%% Presentation Layer
+%% =======================
+class PresentationLayer {
+  <<Package>>
+  API
+  Controllers
+  Services
 }
 
-namespace BusinessLogicLayer {
-  class HBnBFacade <<Facade>>
-  class User
-  class Place
-  class Review
-  class Amenity
+%% =======================
+%% Business Logic Layer
+%% =======================
+class BusinessLogicLayer {
+  <<Package>>
+  Models
+  User
+  Place
+  Review
+  Amenity
 }
 
-namespace PersistenceLayer {
-  class Repositories
-  class Storage <<database>>
+class IHBnBFacade {
+  <<Interface>>
+  +create_user()
+  +create_place()
+  +create_review()
+  +create_amenity()
+  +get_user()
+  +get_place()
 }
 
-API_Routes --> HBnBFacade : calls
-RequestHandlers --> HBnBFacade : calls
+class HBnBFacade {
+  <<Facade>>
+}
 
-HBnBFacade --> User : uses
-HBnBFacade --> Place : uses
-HBnBFacade --> Review : uses
-HBnBFacade --> Amenity : uses
+IHBnBFacade <|.. HBnBFacade
 
-HBnBFacade --> Repositories : reads/writes
-Repositories --> Storage : CRUD
+%% =======================
+%% Persistence Layer
+%% =======================
+class PersistenceLayer {
+  <<Package>>
+  Repositories
+  Database
+  UserRepository
+  PlaceRepository
+  ReviewRepository
+  AmenityRepository
+}
+
+%% =======================
+%% Relationships
+%% =======================
+PresentationLayer ..> IHBnBFacade : uses (Facade)
+HBnBFacade ..> BusinessLogicLayer : manages domain models
+HBnBFacade ..> Repositories : CRUD operations
+Repositories ..> Database : storage / retrieval
+
+Models <|-- User
+Models <|-- Place
+Models <|-- Review
+Models <|-- Amenity
+
+Repositories <|-- UserRepository
+Repositories <|-- PlaceRepository
+Repositories <|-- ReviewRepository
+Repositories <|-- AmenityRepository
 ```
 ## Explanatory Notes
 
-### Presentation Layer (Services / API)
-This layer represents the entry point of the application.
-It is responsible for handling user interactions and HTTP requests.
-All incoming requests are forwarded to the Business Logic layer through
-the facade, without containing any core business rules.
+## Presentation Layer (Services / API)
+This layer represents the entry point of the application.  
+It exposes API endpoints, controllers, and services that receive and handle client requests.  
+The presentation layer communicates with the business logic only through the facade interface (`IHBnBFacade`), avoiding direct dependency on internal models or persistence code.
 
-### Business Logic Layer (Models)
-This layer contains the core business logic of the application.
-It includes the domain models (User, Place, Review, Amenity) and the
-HBnBFacade, which provides a unified interface for the Presentation layer
-to access business operations.
+## Business Logic Layer (Models)
+This layer contains the core business rules and the main domain models: User, Place, Review, and Amenity.  
+HBnBFacade implements the facade interface (`IHBnBFacade`) and provides a unified access point for the presentation layer.  
+It applies validations and coordinates actions across models and persistence components.
 
-### Persistence Layer
-This layer is responsible for data storage and retrieval.
-It manages interactions with the database through repositories or
-data access objects, abstracting storage details from the business logic.
+## Persistence Layer
+This layer is responsible for data storage and retrieval.  
+Repositories (e.g., UserRepository, PlaceRepository) perform CRUD operations and communicate with the database.  
+The business logic layer uses repositories instead of accessing the database directly.
 
-### Facade Pattern
-The Facade pattern simplifies communication between layers by providing
-a single entry point to the Business Logic layer.
-It hides internal complexity, reduces coupling between components,
-and improves maintainability and clarity of the overall architecture.
+## Facade Pattern
+The facade pattern is represented by the interface `IHBnBFacade` and its implementation `HBnBFacade`.  
+It simplifies communication between layers by providing a single entry point to business operations.  
+This reduces coupling between the presentation layer and the internal system components, improving maintainability and clarity.
 
