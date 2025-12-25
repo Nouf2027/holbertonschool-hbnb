@@ -1,6 +1,7 @@
 
 # Sequence Diagrams for API Calls
 <img width="3004" height="1284" alt="image" src="https://github.com/user-attachments/assets/9520d33e-5460-48eb-8441-c2450f7027e3" />
+
 ## Explanation
 
  - The user sends registration information to the API.
@@ -8,6 +9,7 @@
  - The business logic stores the user data in the database.
  - A confirmation is returned back through the layers to the user.
 <img width="3004" height="1348" alt="image" src="https://github.com/user-attachments/assets/1a967759-527d-4328-ab95-81faea583e92" />
+
 ## Explanation
 
  - The user submits place information.
@@ -20,7 +22,8 @@
  - The user submits a review.
  - The review is validated and stored.
  - The system returns the submission result.
- - <img width="3380" height="9468" alt="image" src="https://github.com/user-attachments/assets/cf3e8809-2034-42a3-891f-5dbbe2b540b5" />
+   <img width="1302" height="392" alt="image" src="https://github.com/user-attachments/assets/b6643095-8d23-42d4-a6cb-dad4fda3efb2" />
+
 ## Explanation
  - The user requests places based on criteria.
  - The system retrieves and returns matching results.
