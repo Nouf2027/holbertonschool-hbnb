@@ -28,5 +28,8 @@
    <img width="1302" height="392" alt="image" src="https://github.com/user-attachments/assets/b6643095-8d23-42d4-a6cb-dad4fda3efb2" />
 
 ## Explanation
- - The user requests places based on criteria.
- - The system retrieves and returns matching results.
+
+ - The user sends a request to retrieve a list of places based on specific criteria.
+ - The API receives the request and forwards it to the Business Logic layer for processing.
+ - The Business Logic retrieves the relevant places from the database.
+ - The retrieved data is sent back through the API and displayed to the user.
