@@ -1,11 +1,9 @@
 
 # Sequence Diagrams for API Calls
 
-# Sequence Diagrams for API Calls
 
 ## 1. User Registration
 
-```mermaid
 sequenceDiagram
     actor User
     participant API
@@ -24,6 +22,7 @@ sequenceDiagram
         BL-->>API: Return failure
         API-->>User: Registration error
     end
+    
 ## Explanation
 
  - The user sends registration information to the API.
