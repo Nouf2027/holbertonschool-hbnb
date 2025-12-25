@@ -4,25 +4,25 @@
 
 ```mermaid
 flowchart LR
-  subgraph PL["Presentation Layer (Services / API)"]
+  subgraph PL["Presentation Layer"]
     API["API Endpoints"]
-    Services["Services"]
+    SVC["Services"]
   end
 
-  subgraph BL["Business Logic Layer (Models)"]
-    Facade["HBnBFacade (Facade Interface)"]
-    Models["User, Place, Review, Amenity"]
+  subgraph BL["Business Logic Layer"]
+    FAC["HBnBFacade"]
+    MOD["Models: User, Place, Review, Amenity"]
   end
 
   subgraph PS["Persistence Layer"]
-    Repo["Repositories / DAO"]
+    REP["Repositories / DAO"]
     DB[(Database)]
   end
 
-  API --> Facade
-  Services --> Facade
-  Facade --> Repo
-  Repo --> DB
+  API -. "«use»" .-> FAC
+  SVC -. "«use»" .-> FAC
+  FAC -. "«access»" .-> REP
+  REP -. "«access»" .-> DB
 ```
 ## Explanatory Notes
 
