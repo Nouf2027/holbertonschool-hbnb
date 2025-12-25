@@ -1,5 +1,3 @@
-# Sequence Diagrams for API Calls
-
 ## 1. User Registration
 
 ```mermaid
@@ -22,14 +20,11 @@ sequenceDiagram
         deactivate DB
 
         BL-->>API: Registration success
-        deactivate BL
-
-        API-->>User: Registration successful
-        deactivate API
     else Invalid data
         BL-->>API: Validation error
-        deactivate BL
-
-        API-->>User: Registration failed
-        deactivate API
     end
+
+    deactivate BL
+
+    API-->>User: Registration result (success/failure)
+    deactivate API
