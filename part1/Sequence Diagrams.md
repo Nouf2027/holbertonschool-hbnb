@@ -1,6 +1,5 @@
 
 # Sequence Diagrams for API Calls
-## 1. User Registration
 
 ```mermaid
 sequenceDiagram
