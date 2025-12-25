@@ -3,38 +3,40 @@
 ```mermaid
 sequenceDiagram
     autonumber
-    actor U as User
+    actor User
     participant API
     participant BL as Business Logic
     participant DB as Database
 
-    Note over U,API: Input: email + password
+    Note over User,API: User enters email and password
 
-    U->>API: POST /users/register
+    User->>API: Send registration data
     activate API
 
-    API->>BL: validateRegistration(email, password)
+    API->>BL: Check registration data
     activate BL
 
-    Note right of BL: 1) Check required fields\n2) Validate email format\n3) Validate password rules
+    Note right of BL: 
+    - Check required fields
+    - Check email format
+    - Check password rules
 
-    BL->>DB: findUserByEmail(email)
+    BL->>DB: Check if user exists
     activate DB
-    DB-->>BL: userFound? (true/false)
+    DB-->>BL: User exists? (Yes / No)
     deactivate DB
 
-    alt user not found AND data valid
-        BL->>BL: hashPassword()
-        BL->>DB: saveUser(user)
+    alt User does not exist and data is valid
+        BL->>DB: Save new user
         activate DB
-        DB-->>BL: saved (userId)
+        DB-->>BL: User saved
         deactivate DB
 
-        BL-->>API: success(userId)
-        API-->>U: 201 Created
-    else user exists OR invalid input
-        BL-->>API: error(message)
-        API-->>U: 400 Bad Request
+        BL-->>API: Registration successful
+        API-->>User: Account created
+    else User exists or data is invalid
+        BL-->>API: Registration failed
+        API-->>User: Error message
     end
 
     deactivate BL
