@@ -35,27 +35,23 @@
  - The retrieved data is sent back through the API and displayed to the user.
 
 
-# Sequence Diagrams for API Calls
-
-## Objective
-These sequence diagrams show how requests move across the Presentation (API), Business Logic, and Persistence (Database) layers in the HBnB system.
-
-## API Calls
-
----
-
-## 1. User Registration
-
-```mermaid
 sequenceDiagram
-    participant User
+    autonumber
+    actor User
     participant API
-    participant BusinessLogic
-    participant Database
+    participant BL as BusinessLogic
+    participant DB as Database
 
-    User->>API: Register user (email, password, etc.)
-    API->>BusinessLogic: Validate and process request
-    BusinessLogic->>Database: Store user data
-    Database-->>BusinessLogic: Confirm save
-    BusinessLogic-->>API: Return success/failure
-    API-->>User: Registration successful/error
+    User->>API: Register User (email, password, etc.)
+    API->>BL: Validate & process registration
+    BL->>BL: Check required fields + password rules
+
+    alt Invalid data
+        BL-->>API: Validation failed (400)
+        API-->>User: Registration failed (error message)
+    else Valid data
+        BL->>DB: Store user data
+        DB-->>BL: Confirm save
+        BL-->>API: Return success (201)
+        API-->>User: Registration successful
+    end
