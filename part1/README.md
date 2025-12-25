@@ -1,53 +1,37 @@
 # Task 0: High-Level Package Diagram
 
 ## Overview
-This diagram illustrates the three-layer architecture of the HBnB application and the communication between these layers using the Facade design pattern.
+This package diagram provides a high-level architectural overview of the HBnB Evolution application.  
+It illustrates the three-layer architecture and shows how the layers communicate using the Facade design pattern.
 
 ## UML Package Diagram
 
 ```mermaid
 flowchart TB
-  subgraph Presentation["Presentation Layer (Services / API)"]
-    API["API Endpoints"]
-    Services["Services / Controllers"]
-  end
+  %% Packages
+  Presentation["📁 Presentation Layer\n(Services / API)"]
+  Business["📁 Business Logic Layer\n(Models + Facade)"]
+  Persistence["📁 Persistence Layer\n(Repository / Database)"]
 
-  subgraph Business["Business Logic Layer (Models)"]
-    Facade["HBnBFacade (Facade Interface)"]
-    User["User"]
-    Place["Place"]
-    Review["Review"]
-    Amenity["Amenity"]
-  end
-
-  subgraph Persistence["Persistence Layer"]
-    Repo["Repositories / DAO"]
-    DB[(Database)]
-  end
-
-  API --> Facade
-  Services --> Facade
-
-  Facade --> User
-  Facade --> Place
-  Facade --> Review
-  Facade --> Amenity
-
-  Facade --> Repo
-  Repo --> DB
+  %% Dependencies
+  Presentation -. "«use» Facade" .-> Business
+  Business -. "«use»" .-> Persistence
 ```
 ## Explanatory Notes
 
 ### Presentation Layer (Services / API)
-This layer handles user interactions and HTTP requests. It exposes API endpoints and services that forward requests to the business logic layer through the facade.
+The Presentation Layer represents the entry point of the system.
+It exposes API endpoints and services that receive client requests and delegate processing to the business logic layer via the facade.
 
 ### Business Logic Layer (Models)
-This layer contains the core business logic and the domain models (User, Place, Review, Amenity).
-The HBnBFacade provides a unified interface for the presentation layer.
+The Business Logic Layer contains the core business rules and domain models such as User, Place, Review, and Amenity.
+It also includes the HBnBFacade, which acts as a unified interface between the presentation and persistence layers.
 
 ### Persistence Layer
-This layer manages data storage and retrieval through repositories or data access objects that interact with the database.
+The Persistence Layer is responsible for data storage and retrieval.
+It provides repositories or data access objects that interact directly with the database.
 
 ### Facade Pattern
-The facade pattern simplifies communication between layers by providing a single entry point to the business logic, reducing coupling between components.
+The Facade pattern simplifies inter-layer communication by providing a single access point to the business logic.
+This reduces coupling between layers and improves maintainability and clarity of the architecture.
 
