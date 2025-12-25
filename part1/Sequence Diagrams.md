@@ -1,12 +1,13 @@
 
 # Sequence Diagrams for API Calls
+```mermaid
 sequenceDiagram
     participant User
     participant API
     participant BL as BusinessLogic
     participant DB as Database
 
-    User->>API: Register user (email, password)
+    User->>API: Register user
     activate API
 
     API->>BL: Validate user data
@@ -23,6 +24,7 @@ sequenceDiagram
 
     API-->>User: Registration result
     deactivate API
+```
 
 ## Explanation
 
