@@ -33,3 +33,29 @@
  - The API receives the request and forwards it to the Business Logic layer for processing.
  - The Business Logic retrieves the relevant places from the database.
  - The retrieved data is sent back through the API and displayed to the user.
+
+
+# Sequence Diagrams for API Calls
+
+## Objective
+These sequence diagrams show how requests move across the Presentation (API), Business Logic, and Persistence (Database) layers in the HBnB system.
+
+## API Calls
+
+---
+
+## 1. User Registration
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant API
+    participant BusinessLogic
+    participant Database
+
+    User->>API: Register user (email, password, etc.)
+    API->>BusinessLogic: Validate and process request
+    BusinessLogic->>Database: Store user data
+    Database-->>BusinessLogic: Confirm save
+    BusinessLogic-->>API: Return success/failure
+    API-->>User: Registration successful/error
