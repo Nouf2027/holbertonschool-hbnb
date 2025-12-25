@@ -5,4 +5,5 @@ It shows the main entities, their attributes, methods, and relationships.
 
 
 
-<img width="100%" alt="class digram drawio" src="https://github.com/user-attachments/assets/7a7f2489-9dbb-458c-9052-fa86e6b11e77" />
+
+![class digram drawio](https://github.com/user-attachments/assets/c86cc1bd-1a6a-4b73-9ea9-c42af34494eb)
