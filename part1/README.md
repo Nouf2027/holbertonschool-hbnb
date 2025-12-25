@@ -1,6 +1,6 @@
 # Task 0: High-Level Package Diagram
 
-## High-Level Diagram (Boxes + Arrows style)
+## High-Level Diagram 
 
 ```mermaid
 classDiagram
