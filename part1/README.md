@@ -6,12 +6,12 @@
 classDiagram
 direction TB
 
-namespace "Presentation Layer" {
+namespace PresentationLayer {
   class API_Routes
   class RequestHandlers
 }
 
-namespace "Business Logic Layer" {
+namespace BusinessLogicLayer {
   class HBnBFacade <<Facade>>
   class User
   class Place
@@ -19,7 +19,7 @@ namespace "Business Logic Layer" {
   class Amenity
 }
 
-namespace "Persistence Layer" {
+namespace PersistenceLayer {
   class Repositories
   class Storage <<database>>
 }
@@ -39,22 +39,24 @@ Repositories --> Storage : CRUD
 
 ### Presentation Layer (Services / API)
 This layer represents the entry point of the application.
-It handles user interactions and HTTP requests, and forwards all operations
-to the Business Logic layer through the facade.
+It is responsible for handling user interactions and HTTP requests.
+All incoming requests are forwarded to the Business Logic layer through
+the facade, without containing any core business rules.
 
 ### Business Logic Layer (Models)
-This layer contains the core business logic and the domain models
-(User, Place, Review, Amenity).
-The HBnBFacade provides a unified interface that is used by the Presentation layer
+This layer contains the core business logic of the application.
+It includes the domain models (User, Place, Review, Amenity) and the
+HBnBFacade, which provides a unified interface for the Presentation layer
 to access business operations.
 
 ### Persistence Layer
 This layer is responsible for data storage and retrieval.
-It interacts with the database through repositories or data access objects.
+It manages interactions with the database through repositories or
+data access objects, abstracting storage details from the business logic.
 
 ### Facade Pattern
 The Facade pattern simplifies communication between layers by providing
-a single entry point to the business logic.
-It reduces coupling between components and improves the maintainability
-and clarity of the system architecture.
+a single entry point to the Business Logic layer.
+It hides internal complexity, reduces coupling between components,
+and improves maintainability and clarity of the overall architecture.
 
