@@ -1,6 +1,28 @@
 
 # Sequence Diagrams for API Calls
-<img width="3004" height="1284" alt="image" src="https://github.com/user-attachments/assets/9520d33e-5460-48eb-8441-c2450f7027e3" />
+sequenceDiagram
+    participant User
+    participant API
+    participant BL as BusinessLogic
+    participant DB as Database
+
+    User->>API: Register user (email, password)
+    activate API
+
+    API->>BL: Validate user data
+    activate BL
+
+    BL->>DB: Save user
+    activate DB
+
+    DB-->>BL: Confirm save
+    deactivate DB
+
+    BL-->>API: Success / Failure
+    deactivate BL
+
+    API-->>User: Registration result
+    deactivate API
 
 ## Explanation
 
