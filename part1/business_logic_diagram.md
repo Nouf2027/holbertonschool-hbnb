@@ -6,5 +6,6 @@ It shows the main entities, their attributes, methods, and relationships.
 
 
 
-<img src="https://github.com/user-attachments/assets/PUT_THE_SAME_LINK_HERE" width="100%" />
 
+
+<img src="https://github.com/user-attachments/assets/55936c0c-c09b-4901-b95b-f047a4c62b89" width="100%" />
