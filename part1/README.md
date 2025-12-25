@@ -1,52 +1,53 @@
-# 0. High-Level Package Diagram — HBnB Evolution
+# Task 0: High-Level Package Diagram
 
-## High-Level Package Diagram (Mermaid)
+## Overview
+This diagram illustrates the three-layer architecture of the HBnB application and the communication between these layers using the Facade design pattern.
+
+## UML Package Diagram
 
 ```mermaid
-classDiagram
-direction LR
+flowchart TB
+  subgraph Presentation["Presentation Layer (Services / API)"]
+    API["API Endpoints"]
+    Services["Services / Controllers"]
+  end
 
-class PresentationLayer {
-  <<package>>
-  API Endpoints
-  Services
-}
+  subgraph Business["Business Logic Layer (Models)"]
+    Facade["HBnBFacade (Facade Interface)"]
+    User["User"]
+    Place["Place"]
+    Review["Review"]
+    Amenity["Amenity"]
+  end
 
-class BusinessLogicLayer {
-  <<package>>
-  Facade Interface
-  Models (User, Place, Review, Amenity)
-}
+  subgraph Persistence["Persistence Layer"]
+    Repo["Repositories / DAO"]
+    DB[(Database)]
+  end
 
-class PersistenceLayer {
-  <<package>>
-  Repositories
-  Database
-}
+  API --> Facade
+  Services --> Facade
 
-PresentationLayer ..> BusinessLogicLayer : uses Facade
-BusinessLogicLayer ..> PersistenceLayer : database operations
+  Facade --> User
+  Facade --> Place
+  Facade --> Review
+  Facade --> Amenity
+
+  Facade --> Repo
+  Repo --> DB
 ```
 ## Explanatory Notes
 
-### Presentation Layer (Services, API)
-- Handles user interaction with the system through API endpoints and services.
-- Validates and forwards requests to the Business Logic layer.
-- Communicates with the Business Logic layer only via the Facade.
-- Does not access the database directly.
+### Presentation Layer (Services / API)
+This layer handles user interactions and HTTP requests. It exposes API endpoints and services that forward requests to the business logic layer through the facade.
 
 ### Business Logic Layer (Models)
-- Contains the core business logic and validation rules.
-- Holds the domain models: User, Place, Review, and Amenity.
-- Exposes a unified Facade Interface used by the Presentation layer.
-- Coordinates operations and delegates persistence operations to the Persistence layer.
+This layer contains the core business logic and the domain models (User, Place, Review, Amenity).
+The HBnBFacade provides a unified interface for the presentation layer.
 
 ### Persistence Layer
-- Responsible for data storage and retrieval.
-- Provides repositories (or DAO) to perform CRUD operations.
-- Interacts with the database (implementation details are handled in Part 3).
+This layer manages data storage and retrieval through repositories or data access objects that interact with the database.
 
 ### Facade Pattern
-- Provides a single entry point from the Presentation layer to the Business Logic layer.
-- Reduces coupling between layers and simplifies interactions.
-- Helps keep responsibilities separated and makes future changes easier.
+The facade pattern simplifies communication between layers by providing a single entry point to the business logic, reducing coupling between components.
+
