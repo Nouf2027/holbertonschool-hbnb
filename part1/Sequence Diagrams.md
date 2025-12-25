@@ -2,7 +2,6 @@
 # Sequence Diagrams for API Calls
 
 
-# Sequence Diagrams for API Calls
 
 ## Objective
 These sequence diagrams describe the time-ordered interaction between the User, API (Presentation layer), Business Logic layer, and Database (Persistence layer) for common API calls in the HBnB system.
@@ -29,7 +28,7 @@ sequenceDiagram
     else Invalid input
         BL-->>API: Validation error
         API-->>User: Registration failed
-    end
+    
     
 ## Explanation
 
