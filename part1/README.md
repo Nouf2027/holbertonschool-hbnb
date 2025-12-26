@@ -6,55 +6,52 @@
 classDiagram
 direction TB
 
-class PresentationLayer {
-  <<Package>>
-  API
-  Controllers
-  Services
+namespace PresentationLayer {
+    class Presentation {
+        +API
+        +Controllers
+        +Services
+    }
 }
 
-class BusinessLogicLayer {
-  <<Package>>
-  Models
-  User
-  Place
-  Review
-  Amenity
+namespace BusinessLogicLayer {
+    class HBnBFacade {
+        +Unified Interface
+    }
+
+    class Models {
+        +User
+        +Place
+        +Review
+        +Amenity
+    }
 }
 
-class IHBnBFacade {
-  <<Interface>>
+namespace PersistenceLayer {
+    class Database {
+        +Persisted Data
+    }
 }
 
-class HBnBFacade {
-  <<Facade>>
-}
-
-IHBnBFacade <|.. HBnBFacade
-
-class PersistenceLayer {
-  <<Package>>
-  Repositories
-  Database
-}
-
-PresentationLayer ..> IHBnBFacade : uses
-HBnBFacade ..> BusinessLogicLayer : business logic
-HBnBFacade ..> PersistenceLayer : data access
+Presentation --> HBnBFacade : Facade Pattern
+HBnBFacade --> Models : Uses
+Models --> Database : Database Operations
 ```
-## Explanatory Notes
+Explanatory Notes
+Presentation Layer (Services / API)
 
-## Presentation Layer (Services / API)
-Handles client requests and API endpoints.  
-Communicates with the business logic only through the facade interface.
+Handles client interaction and HTTP requests through API endpoints, controllers, and services.
+It forwards requests to the Business Logic layer via the facade.
 
-## Business Logic Layer (Models)
-Contains the core business logic and domain models.  
-The facade provides a unified access point for operations.
+Business Logic Layer (Models)
 
-## Persistence Layer
-Responsible for data storage and retrieval through repositories.
+Contains the domain models (User, Place, Review, Amenity) and core business rules.
+The HBnBFacade provides a unified entry point used by the Presentation layer.
 
-## Facade Pattern
-Provides a single interface to simplify communication between layers and reduce coupling.
+Persistence Layer
 
+Responsible for persisting and retrieving data from the database (implemented in Part 3).
+
+Facade Pattern
+
+The facade simplifies communication between layers by providing a single access point to the business logic, reducing coupling and improving maintainability.
