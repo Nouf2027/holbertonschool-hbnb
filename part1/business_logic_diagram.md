@@ -27,3 +27,20 @@ The User entity includes identifying and account-related information such as id,
 
 Methods:
 The User can write reviews for places and create new places in the system
+
+
+
+## Place
+Represents a property or accommodation that is listed in the HBnB system.
+
+Role:
+The Place acts as the central business entity. It is owned by a user, can receive multiple reviews, and can be associated with multiple amenities.
+
+Attributes:
+The Place contains descriptive and pricing information such as id, owner_id, description, creattion date, price_per_night.
+
+Methods: 
+The Place allows adding reviews and associating amenities to describe available features.
+
+
+
