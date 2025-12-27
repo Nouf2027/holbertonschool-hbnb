@@ -52,8 +52,23 @@ Main Flow:
 
 Alternative Flow:
 - If the place does not exist or the data is invalid, an error message is returned.
+- 
+# User Registration 
+*Purpose:**  
+Create a new user account.
 
+*Flow:**
+- The client submits registration data.
+- The API validates the input format (required fields).
+- Business Logic checks business rules and ensures the user does not already exist.
+- Persistence stores the new user.
+- A success response is returned to the client.
 ![5944884991877647228](https://github.com/user-attachments/assets/3225190e-b1ff-462e-893d-541061bfb35d)
+
+  *Explanatory Notes:**
+- Key components: Client, API, BusinessLogic (Facade), Persistence/Database.
+- Design decision: Business Logic handles uniqueness and rules; API only does basic validation.
+- Alternative flow: If user exists or data is invalid, return an error message
 ![5944884991877647231](https://github.com/user-attachments/assets/c73e51bb-d1f9-44d5-b894-07b7bd2b73aa)
 ![5944884991877647230](https://github.com/user-attachments/assets/19e7b63a-f524-4f5e-9ee3-621501ebab3c)
 ![5944884991877647229](https://github.com/user-attachments/assets/53b099d4-7e77-4241-aea9-431ce1032070)
