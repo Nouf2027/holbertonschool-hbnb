@@ -44,3 +44,28 @@ The Place allows adding reviews and associating amenities to describe available 
 
 
 
+## Review
+Represents feedback provided by a user about a specific place.
+
+Role:
+The Review connects users and places by allowing users to evaluate and rate places they have intracted with.
+
+Attributes:
+The Review includes identifiers, rating and comment details, references to the related user and place, and a creation timestamp.
+
+Methods:
+The Review can be edited or deleted to manage user feedback.
+
+
+## Amenity:
+Represents a feature or service that can be offered by a place.
+
+Role:
+Amenities enhance places by describing available facilities and features that improve user experience.
+
+Attributes:
+The Amenity includes identification data, descriptive information, status (active or not), and timestamps.
+
+Methods:
+The Amenity can be updated to reflect changes in availability or description.
+
