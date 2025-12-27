@@ -5,7 +5,8 @@
 This document describes the architecture and interaction flow of the HBNB Evolution project.
 It explains how system components communicate using UML diagrams.
 The document serves as a reference for understanding the system design.
- AUTHORS:
+
+AUTHORS:
 @Nouf2027
 @
 @
@@ -19,7 +20,7 @@ The Persistence layer is responsible for data storage.
 The Business Logic layer validates data and applies application rules.
 It acts as a facade between the API and the database.
 This layer ensures consistency and separation of concerns.
-
+## 4. API Interaction Flow
  ### 4.1 User Registration 
 
 Purpose:
