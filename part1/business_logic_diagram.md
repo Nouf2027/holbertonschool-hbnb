@@ -69,3 +69,13 @@ The Amenity includes identification data, descriptive information, status (activ
 Methods:
 The Amenity can be updated to reflect changes in availability or description.
 
+## Relationships
+
+. A User can own zero or many Places, while each Place is owned by exactly one User.
+
+. A User can write zero or many Reviews, while each Review is written by exactly one User.
+
+. A Place can have zero or many Reviews, while each Review is associated with exactly one Place.
+
+. A Place can be linked to zero or many Amenities, and an Amenity can be linked to zero or many Places.
+
