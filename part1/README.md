@@ -55,9 +55,8 @@ Flow:
 - The user submits a review and rating.
 - The system validates the request.
 - The review is saved.
-
-https://github.com/user-attachments/assets/3225190e-b1ff-462e-893d-541061bfb35d
-
+  
+https://github.com/user-attachments/assets/19e7b63a-f524-4f5e-9ee3-621501ebab3c
 ### 4.4 Fetch Places — GET /places
 
 Purpose:
@@ -67,6 +66,7 @@ Flow:
 - The user requests places.
 - Filters are validated if provided.
 - A list of places is returned.
+https://github.com/user-attachments/assets/53b099d4-7e77-4241-aea9-431ce1032070
 
 ## 5. Conclusion
 This document provides an overview of the system architecture and API interactions.
