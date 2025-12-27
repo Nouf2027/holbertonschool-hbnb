@@ -52,12 +52,12 @@ Main Flow:
 
 Alternative Flow:
 - If the place does not exist or the data is invalid, an error message is returned.
-- 
-# User Registration 
+  
+  ### User Registration 
 *Purpose:**  
 Create a new user account.
 
-*Flow:**
+* Flow:*
 - The client submits registration data.
 - The API validates the input format (required fields).
 - Business Logic checks business rules and ensures the user does not already exist.
@@ -65,15 +65,62 @@ Create a new user account.
 - A success response is returned to the client.
 ![5944884991877647228](https://github.com/user-attachments/assets/3225190e-b1ff-462e-893d-541061bfb35d)
 
-  *Explanatory Notes:**
+  * Explanatory Notes: *
 - Key components: Client, API, BusinessLogic (Facade), Persistence/Database.
 - Design decision: Business Logic handles uniqueness and rules; API only does basic validation.
 - Alternative flow: If user exists or data is invalid, return an error message
+
+  ### Place Creation
+** Purpose: **  
+Create a new place listing.
+
+Flow:
+- The user submits place details.
+- The API forwards the request to Business Logic after basic validation.
+- Business Logic validates required fields, checks place constraints, and verifies it does not already exist.
+- Persistence stores the new place and returns its identifier.
+- A success response (with placeId) is returned.
+
 ![5944884991877647231](https://github.com/user-attachments/assets/c73e51bb-d1f9-44d5-b894-07b7bd2b73aa)
+
+Explanatory Notes:
+- Key components: Client, API, BusinessLogic, Persistence.
+- Design decision: All domain rules (title format, location values) live in Business Logic.
+- Alternative flow: If the place exists or data is invalid, return an error response
+
+ ### Review Creation
+Purpose:  
+Submit a review and rating for a place.
+
+Flow:
+- The user submits review data (rating + comment).
+- The API forwards the request to Business Logic.
+- Business Logic validates fields, validates rating range, and checks that the place exists.
+- The review object is created and stored.
+- A success response is returned
 ![5944884991877647230](https://github.com/user-attachments/assets/19e7b63a-f524-4f5e-9ee3-621501ebab3c)
+Explanatory Notes:
+- Key components: Client, API, BusinessLogic, Persistence.
+- Design decision: Place existence and rating rules are enforced in Business Logic.
+- Alternative flow: If place not found or data invalid, return an error message.
+
+  ### Fetching a List of Places
+Purpose:  
+Retrieve available places.
+
+Flow:
+- The user requests the list of places.
+- The API forwards request parameters to Business Logic.
+- Business Logic validates request parameters and applies filters if present.
+- Persistence retrieves the list from storage.
+- The API returns the results to the user.
+
 ![5944884991877647229](https://github.com/user-attachments/assets/53b099d4-7e77-4241-aea9-431ce1032070)
 
-
+Explanatory Notes:
+- Key components: Client, API, BusinessLogic, Persistence.
+- Design decision: Filtering/validation lives in Business Logic for consistency.
+- Alternative flow: If no results exist, return an empty list response
 
   This design ensures separation of concerns between layers.
 The use of the Facade pattern simplifies communication between the API
