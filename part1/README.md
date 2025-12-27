@@ -1,4 +1,11 @@
 ## HBnB Evolution — Technical Documentation
+
+- [Introduction](#introduction)
+- [High-Level Architecture](#high-level-architecture)
+- [Business Logic Layer](#business-logic-layer)
+- [API Interaction Flow](#api-interaction-flow)
+
+
 # Introduction
 This document provides the technical documentation for the HBnB Evolution project.
 It describes the system architecture, business logic design, and API interaction
@@ -6,6 +13,7 @@ flows using UML diagrams. The document serves as a reference for the implementat
 phases of the project.
 
 AUTHORS :
+
 
 # High-Level Architecture
 The application follows a layered architecture consisting of three main layers:
@@ -44,6 +52,12 @@ Main Flow:
 
 Alternative Flow:
 - If the place does not exist or the data is invalid, an error message is returned.
+
+![5944884991877647228](https://github.com/user-attachments/assets/3225190e-b1ff-462e-893d-541061bfb35d)
+![5944884991877647231](https://github.com/user-attachments/assets/c73e51bb-d1f9-44d5-b894-07b7bd2b73aa)
+![5944884991877647230](https://github.com/user-attachments/assets/19e7b63a-f524-4f5e-9ee3-621501ebab3c)
+![5944884991877647229](https://github.com/user-attachments/assets/53b099d4-7e77-4241-aea9-431ce1032070)
+
 
 
   This design ensures separation of concerns between layers.
