@@ -16,7 +16,7 @@ It shows the main entities, their attributes, methods, and relationships.
 
 ## Explanatory Notes
 
-User
+## User
 Represents a person who uses the HBnB system, either as a host or a guest.
 
 Role:
