@@ -9,20 +9,6 @@
 | Sara  Almaugly | Developer | Class Diagram |
 
 
-## 📑 Table of Contents
-
-1. [Introduction](#1-introduction)
-2. [High-Level Architecture](#2-high-level-architecture)
-3. [Business Logic Layer](#3-business-logic-layer)
-4. [API Interaction Flow](#4-api-interaction-flow)
-   - [User Registration](#41-user-registration--post-users)
-   - [Place Creation](#42-place-creation--post-places)
-   - [Review Submission](#43-review-submission--post-placesidreviews)
-   - [Fetch Places](#44-fetching-a-list-of-places--get-places)
-5. [Design Principles](#5-design-principles)
-6. [Conclusion](#6-conclusion)
-
-# HBnB Evolution — Technical Documentation
 
 ## Table of Contents
 - [1. Introduction](#1-introduction)
@@ -81,7 +67,6 @@ The **Facade** pattern is used to:
 - Reduce tight coupling and make the system easier to evolve.
 
 #### High-Level Package Diagram
-![High-Level Package Diagram](./High-Level-Package-Diagram.png)
 
 **Explanatory Notes (Package Diagram):**
 - **Purpose:** Illustrates the three-layer architecture and how layers communicate using a Facade.
@@ -132,7 +117,6 @@ The main entities include: **User, Place, Review, Amenity**.
 - A **Place** can have multiple **Amenities** and an Amenity can belong to multiple Places (* ↔ *).
 
 #### Detailed Class Diagram (Business Logic Layer)
-![Detailed Class Diagram](./Detailed-Class-Diagram.png)
 
 **Explanatory Notes (Class Diagram):**
 - **Purpose:** Shows the Business Logic entities, attributes, methods, and relationships.
@@ -164,7 +148,6 @@ Create a new user account.
 - Persistence stores the new user.
 - A success response is returned to the client.
 
-![User Registration Sequence Diagram](./user_registration.png)
 
 **Explanatory Notes:**
 - **Key components:** Client, API, BusinessLogic (Facade), Persistence/Database.
@@ -206,7 +189,6 @@ Submit a review and rating for a place.
 - The review object is created and stored.
 - A success response is returned.
 
-![Review Submission Sequence Diagram](./review_submission.png)
 
 **Explanatory Notes:**
 - **Key components:** Client, API, BusinessLogic, Persistence.
@@ -227,7 +209,6 @@ Retrieve available places (optionally using filters).
 - Persistence retrieves the list from storage.
 - The API returns the results to the user.
 
-![Fetch Places Sequence Diagram](./fetch_places.png)
 
 **Explanatory Notes:**
 - **Key components:** Client, API, BusinessLogic, Persistence.
