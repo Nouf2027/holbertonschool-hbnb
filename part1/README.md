@@ -5,8 +5,8 @@
 | Name | Role | Responsibility |
 |------|------|----------------|
 | Nouf  Almutairi | Developer | Sequence Diagrams  |
-| Roya   | Architect | High-Level Package Diagram |
-| Sara  Almaugly | Developer | Class Diagram |
+| Roya   | Architect | Class Diagram |
+| Sara  Almaugly | Developer | High-Level Package Diagram |
 
 
 
