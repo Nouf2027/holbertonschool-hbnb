@@ -168,7 +168,6 @@ Create a new place listing.
 - Persistence stores the new place and returns its identifier.
 - A success response (with placeId) is returned.
 
-![Place Creation Sequence Diagram](./place_creation.png)
 
 **Explanatory Notes:**
 - **Key components:** Client, API, BusinessLogic, Persistence.
