@@ -1,12 +1,12 @@
-# HBnB – Part 2
+# HBnB - Part 2
 
 ## Project Overview
-This part of the HBnB project focuses on implementing the **Business Logic layer** and preparing the **Presentation layer** using Flask and Flask-RESTx.
+This part of the HBnB project focuses on implementing the **Business Logic layer** and building the **Presentation layer (API)** using **Flask** and **Flask-RESTx**.
 
 The project follows a **three-layer architecture**:
-- Presentation Layer (API)
-- Business Logic Layer (Models)
-- Persistence Layer (In-memory repository)
+- **Presentation Layer** (API endpoints with Flask-RESTx)
+- **Business Logic Layer** (Models + Facade)
+- **Persistence Layer** (In-memory repository)
 
 ## Implemented Tasks
 
@@ -23,13 +23,22 @@ The project follows a **three-layer architecture**:
 - Amenity
 - Shared BaseModel with UUID and timestamps
 
+### Task 2 – User Endpoints
+- `POST /api/v1/users/` (create user with email uniqueness check)
+- `GET /api/v1/users/` (list users)
+- `GET /api/v1/users/<user_id>` (get user by id)
+- `PUT /api/v1/users/<user_id>` (update user)
+- Password is not returned in API responses
+
 ## Technologies Used
 - Python 3
 - Flask
 - Flask-RESTx
 
 ## How to Run
+From the `part2/` directory:
+
 ```bash
-pip install -r requirements.txt
-python hbnb/run.py
+pip3 install -r hbnb/requirements.txt
+python3 hbnb/run.py
 
