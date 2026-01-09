@@ -36,6 +36,13 @@ The project follows a **three-layer architecture**:
 - GET /api/v1/amenities/<amenity_id> (get amenity by id)
 - PUT /api/v1/amenities/<amenity_id> (update amenity)
 - DELETE operation is not implemented for amenities
+
+  Task 4 – Place Endpoints
+- POST /api/v1/places/ (create place)
+- GET /api/v1/places/ (list places)
+- GET /api/v1/places/<place_id> (get place by id)
+- PUT /api/v1/places/<place_id> (update place)
+- DELETE operation is not implemented for places
   
 ## Technologies Used
 - Python 3
