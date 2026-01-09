@@ -1,4 +1,3 @@
-
 from uuid import uuid4
 from datetime import datetime
 
@@ -23,19 +22,36 @@ class Place:
         self.latitude = latitude
         self.longitude = longitude
         self.amenity_ids = amenity_ids or []
-
         self.created_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
 
+    def validate(self):
+        if not self.name or not isinstance(self.name, str):
+            return False, "Invalid name"
+
+        if not isinstance(self.price_per_night, (int, float)) or self.price_per_night <= 0:
+            return False, "Invalid price"
+
+        if self.latitude is not None:
+            if not isinstance(self.latitude, (int, float)) or not (-90 <= self.latitude <= 90):
+                return False, "Invalid latitude"
+
+        if self.longitude is not None:
+            if not isinstance(self.longitude, (int, float)) or not (-180 <= self.longitude <= 180):
+                return False, "Invalid longitude"
+
+        if not self.owner_id or not isinstance(self.owner_id, str):
+            return False, "Invalid owner_id"
+
+        if not isinstance(self.amenity_ids, list):
+            return False, "Invalid amenity_ids"
+
+        return True, None
+
     def update(self, data: dict):
-        # Update only allowed fields
-        allowed = {
-            "name", "description", "price_per_night",
-            "latitude", "longitude", "amenity_ids"
-        }
-        for k, v in data.items():
-            if k in allowed:
-                setattr(self, k, v)
+        for key, value in data.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
         self.updated_at = datetime.utcnow()
 
     def to_dict(self):
@@ -49,5 +65,5 @@ class Place:
             "longitude": self.longitude,
             "amenity_ids": self.amenity_ids,
             "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
         }
