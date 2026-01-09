@@ -29,7 +29,14 @@ The project follows a **three-layer architecture**:
 - `GET /api/v1/users/<user_id>` (get user by id)
 - `PUT /api/v1/users/<user_id>` (update user)
 - Password is not returned in API responses
+### Task 3 – Amenity Endpoints
 
+- POST /api/v1/amenities/ (create amenity)
+- GET /api/v1/amenities/ (list amenities)
+- GET /api/v1/amenities/<amenity_id> (get amenity by id)
+- PUT /api/v1/amenities/<amenity_id> (update amenity)
+- DELETE operation is not implemented for amenities
+  
 ## Technologies Used
 - Python 3
 - Flask
