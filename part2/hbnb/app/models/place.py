@@ -1,4 +1,4 @@
-# part2/hbnb/models/place.py
+
 from uuid import uuid4
 from datetime import datetime
 
