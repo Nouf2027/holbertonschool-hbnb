@@ -2,7 +2,7 @@ from app.models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """Place model"""
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
