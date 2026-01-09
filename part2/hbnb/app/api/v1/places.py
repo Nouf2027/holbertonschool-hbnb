@@ -1,54 +1,36 @@
-from app.models.base_model import BaseModel
 
-class Place(BaseModel):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.title = (kwargs.get("title") or "").strip()
-        self.description = (kwargs.get("description") or "").strip()
-        self.price = float(kwargs.get("price", 0))
-        self.latitude = float(kwargs.get("latitude", 0))
-        self.longitude = float(kwargs.get("longitude", 0))
-        self.owner_id = (kwargs.get("owner_id") or "").strip()
-        self.amenity_ids = list(kwargs.get("amenity_ids", []))
 
-    def validate(self):
-        if not self.title:
-            return False, "Title is required"
-        if not isinstance(self.title, str):
-            return False, "Title must be a string"
-        if len(self.title) > 100:
-            return False, "Title too long"
+from flask_restx import Namespace, Resource
+from flask import request
+from app.services.facade import HBnBFacade
 
-        if not isinstance(self.price, (int, float)) or self.price <= 0:
-            return False, "Invalid price"
+api = Namespace("places", description="Places endpoints")
+facade = HBnBFacade()
 
-        if not (-90 <= self.latitude <= 90):
-            return False, "Invalid latitude"
+@api.route("/")
+class PlaceList(Resource):
+    def get(self):
+        places = facade.get_all_places()
+        return [p.to_dict() for p in places], 200
 
-        if not (-180 <= self.longitude <= 180):
-            return False, "Invalid longitude"
+    def post(self):
+        data = request.get_json()
+        place, error = facade.create_place(data)
+        if error:
+            return {"error": error}, 400
+        return place.to_dict(), 201
 
-        if not self.owner_id:
-            return False, "Owner ID is required"
+@api.route("/<place_id>")
+class PlaceItem(Resource):
+    def get(self, place_id):
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+        return place.to_dict(), 200
 
-        if not isinstance(self.amenity_ids, list):
-            return False, "Amenity IDs must be a list"
-
-        return True, None
-
-    def add_amenity(self, amenity_id):
-        if amenity_id not in self.amenity_ids:
-            self.amenity_ids.append(amenity_id)
-
-    def to_dict(self):
-        data = super().to_dict()
-        data.update({
-            "title": self.title,
-            "description": self.description,
-            "price": self.price,
-            "latitude": self.latitude,
-            "longitude": self.longitude,
-            "owner_id": self.owner_id,
-            "amenity_ids": self.amenity_ids
-        })
-        return data
+    def put(self, place_id):
+        data = request.get_json()
+        place, error = facade.update_place(place_id, data)
+        if error:
+            return {"error": error}, 400
+        return place.to_dict(), 200
