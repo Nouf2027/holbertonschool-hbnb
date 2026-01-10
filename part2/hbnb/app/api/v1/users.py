@@ -33,9 +33,11 @@ class UserList(Resource):
     @api.marshal_with(user_out, code=201)
     def post(self):
         data = api.payload
-        if facade.get_user_by_email(data["email"]):
-            api.abort(400, "Email already registered")
-        user = facade.create_user(data)
+
+        user, error = facade.create_user(data)
+        if error:
+            api.abort(400, error)
+
         return user.to_dict(), 201
 
 @api.route("/<string:user_id>")
@@ -51,11 +53,11 @@ class UserResource(Resource):
     @api.marshal_with(user_out, code=200)
     def put(self, user_id):
         data = api.payload
-        user = facade.get_user(user_id)
-        if not user:
-            api.abort(404, "User not found")
-        if "email" in data and data["email"] != user.email:
-            if facade.get_user_by_email(data["email"]):
-                api.abort(400, "Email already registered")
-        updated = facade.update_user(user_id, data)
+
+        updated, error = facade.update_user(user_id, data)
+        if error:
+            if error == "User not found":
+                api.abort(404, error)
+            api.abort(400, error)
+
         return updated.to_dict(), 200

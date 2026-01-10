@@ -1,65 +1,39 @@
-import unittest
-import json
-from urllib import request, error
+import uuid
+import pytest
 
-BASE_URL = "http://127.0.0.1:5000/api/v1"
+BASE = "/api/v1"
 
-class TestTask6API(unittest.TestCase):
+def _u():
+    return str(uuid.uuid4())[:8]
 
-    def http_request(self, method, url, data=None):
-        headers = {"Content-Type": "application/json"}
-        if data:
-            data = json.dumps(data).encode("utf-8")
-        req = request.Request(url, data=data, headers=headers, method=method)
-        try:
-            with request.urlopen(req) as res:
-                return res.status, res.read().decode()
-        except error.HTTPError as e:
-            return e.code, e.read().decode()
+def test_swagger_available(client):
+    res = client.get(f"{BASE}/")
+    assert res.status_code == 200
 
-    def test_swagger_available(self):
-        status, _ = self.http_request("GET", f"{BASE_URL}/")
-        self.assertEqual(status, 200)
+def test_create_place_invalid_missing_name(client):
+    res = client.post(f"{BASE}/places/", json={
+        "description": "Test",
+        "price_per_night": 100,
+        "latitude": 0,
+        "longitude": 0,
+        "owner_id": "invalid"
+    })
+    assert res.status_code == 400
 
-    def test_create_place_invalid_missing_title(self):
-        status, _ = self.http_request(
-            "POST",
-            f"{BASE_URL}/places/",
-            {
-                "description": "Test",
-                "price": 100,
-                "latitude": 0,
-                "longitude": 0,
-                "owner_id": "invalid"
-            }
-        )
-        self.assertEqual(status, 400)
+def test_get_place_not_found(client):
+    res = client.get(f"{BASE}/places/does-not-exist")
+    assert res.status_code == 404
 
-    def test_get_place_not_found(self):
-        status, _ = self.http_request(
-            "GET",
-            f"{BASE_URL}/places/does-not-exist"
-        )
-        self.assertEqual(status, 404)
+def test_create_review_invalid_missing_text(client):
+    # because you used @api.expect(validate=True) in reviews,
+    # missing "text" should fail at payload validation level => 400
+    res = client.post(f"{BASE}/reviews/", json={
+        "rating": 5,
+        "user_id": "invalid",
+        "place_id": "invalid"
+    })
+    assert res.status_code == 400
 
-    def test_create_review_invalid_missing_text(self):
-        status, _ = self.http_request(
-            "POST",
-            f"{BASE_URL}/reviews/",
-            {
-                "rating": 5,
-                "user_id": "invalid",
-                "place_id": "invalid"
-            }
-        )
-        self.assertEqual(status, 400)
-
-    def test_get_review_not_found(self):
-        status, _ = self.http_request(
-            "GET",
-            f"{BASE_URL}/reviews/does-not-exist"
-        )
-        self.assertIn(status, (404, 500))
-
-if __name__ == "__main__":
-    unittest.main()
+def test_get_review_not_found(client):
+    res = client.get(f"{BASE}/reviews/does-not-exist")
+    assert res.status_code == 404

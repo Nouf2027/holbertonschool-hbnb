@@ -12,9 +12,12 @@ class PlaceList(Resource):
         return [p.to_dict() for p in places], 200
 
     def post(self):
-        data = request.get_json()
+        data = request.get_json(silent=True) or {}
         place, error = facade.create_place(data)
         if error:
+            # Reference error: owner must exist
+            if error == "Owner not found":
+                return {"error": error}, 404
             return {"error": error}, 400
         return place.to_dict(), 201
 
@@ -28,9 +31,13 @@ class PlaceItem(Resource):
         return place.to_dict(), 200
 
     def put(self, place_id):
-        data = request.get_json()
+        data = request.get_json(silent=True) or {}
         place, error = facade.update_place(place_id, data)
         if error:
+            if error == "Place not found":
+                return {"error": error}, 404
+            if error == "Owner not found":
+                return {"error": error}, 404
             return {"error": error}, 400
         return place.to_dict(), 200
 
@@ -47,6 +54,7 @@ class PlaceReviewList(Resource):
                 "id": r.id,
                 "text": r.text,
                 "rating": r.rating,
-                "user_id": r.user_id
+                "user_id": r.user_id,
+                "place_id": r.place_id
             } for r in reviews
         ], 200
