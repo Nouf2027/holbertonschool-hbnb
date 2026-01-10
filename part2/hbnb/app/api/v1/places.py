@@ -4,6 +4,7 @@ from app.services import facade
 
 api = Namespace("places", description="Places endpoints")
 
+
 @api.route("/")
 class PlaceList(Resource):
     def get(self):
@@ -16,6 +17,7 @@ class PlaceList(Resource):
         if error:
             return {"error": error}, 400
         return place.to_dict(), 201
+
 
 @api.route("/<place_id>")
 class PlaceItem(Resource):
@@ -36,11 +38,10 @@ class PlaceItem(Resource):
 @api.route("/<place_id>/reviews")
 class PlaceReviewList(Resource):
     def get(self, place_id):
-        place = facade.get_place(place_id)
-        if not place:
-            return {"error": "Place not found"}, 404
+        reviews, error = facade.get_reviews_by_place(place_id)
+        if error:
+            return {"error": error}, 404
 
-        reviews = facade.get_reviews_by_place(place_id)
         return [
             {
                 "id": r.id,
