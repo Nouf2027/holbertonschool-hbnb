@@ -1,5 +1,4 @@
 from flask_restx import Namespace, Resource, fields
-from flask import request
 from app.services import facade
 
 api = Namespace("reviews", description="Review operations")
@@ -24,10 +23,6 @@ review_out = api.model("ReviewOut", {
     "place_id": fields.String,
 })
 
-def _status_from_error(msg: str) -> int:
-    if msg in ("User not found", "Place not found", "Review not found"):
-        return 404
-    return 400
 
 @api.route("/")
 class ReviewList(Resource):
@@ -39,10 +34,11 @@ class ReviewList(Resource):
     @api.expect(review_in, validate=True)
     @api.marshal_with(review_out, code=201)
     def post(self):
-        data = request.get_json(silent=True) or {}
-        review, error = facade.create_review(data)
+        review, error = facade.create_review(api.payload)
         if error:
-            return {"error": error}, _status_from_error(error)
+            if "not found" in error.lower():
+                api.abort(404, error)
+            api.abort(400, error)
         return review.to_dict(), 201
 
 
@@ -56,16 +52,16 @@ class ReviewItem(Resource):
         return review.to_dict(), 200
 
     @api.expect(review_update, validate=True)
-    @api.marshal_with(review_out, code=200)
+    @api.response(200, "Review updated successfully")
     def put(self, review_id):
-        data = request.get_json(silent=True) or {}
-        review, error = facade.update_review(review_id, data)
+        review, error = facade.update_review(review_id, api.payload)
         if error:
-            return {"error": error}, _status_from_error(error)
-        return review.to_dict(), 200
+            if "not found" in error.lower():
+                api.abort(404, error)
+            api.abort(400, error)
+        return {"message": "Review updated successfully"}, 200
 
     @api.response(204, "Review deleted successfully")
-    @api.response(404, "Review not found")
     def delete(self, review_id):
         deleted, error = facade.delete_review(review_id)
         if not deleted:

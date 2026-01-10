@@ -1,4 +1,3 @@
-from flask import request
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 
@@ -6,7 +5,7 @@ api = Namespace("amenities", description="Amenity operations")
 
 amenity_in = api.model("AmenityIn", {
     "name": fields.String(required=True, description="Name of the amenity"),
-    "is_active": fields.Boolean(required=False, description="Amenity active flag"),
+    "is_active": fields.Boolean(required=False, description="Amenity status"),
 })
 
 amenity_out = api.model("AmenityOut", {
@@ -14,6 +13,7 @@ amenity_out = api.model("AmenityOut", {
     "name": fields.String,
     "is_active": fields.Boolean,
 })
+
 
 @api.route("/")
 class AmenityList(Resource):
@@ -25,11 +25,11 @@ class AmenityList(Resource):
     @api.expect(amenity_in, validate=True)
     @api.marshal_with(amenity_out, code=201)
     def post(self):
-        data = request.get_json(silent=True) or {}
-        amenity, error = facade.create_amenity(data)
+        amenity, error = facade.create_amenity(api.payload)
         if error:
             api.abort(400, error)
         return amenity.to_dict(), 201
+
 
 @api.route("/<string:amenity_id>")
 class AmenityResource(Resource):
@@ -41,12 +41,11 @@ class AmenityResource(Resource):
         return amenity.to_dict(), 200
 
     @api.expect(amenity_in, validate=True)
-    @api.marshal_with(amenity_out, code=200)
+    @api.response(200, "Amenity updated successfully")
     def put(self, amenity_id):
-        data = request.get_json(silent=True) or {}
-        amenity, error = facade.update_amenity(amenity_id, data)
+        amenity, error = facade.update_amenity(amenity_id, api.payload)
         if error:
-            if error == "Amenity not found":
+            if "not found" in error.lower():
                 api.abort(404, error)
             api.abort(400, error)
-        return amenity.to_dict(), 200
+        return {"message": "Amenity updated successfully"}, 200

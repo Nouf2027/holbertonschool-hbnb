@@ -1,91 +1,305 @@
-# Task 6 – Testing and Validation (HBnB Part 2)
+# Task 6 – Testing and Validation Report (HBnB Part 2)
 
-## Overview
-This report documents both **manual (black-box)** and **automated** testing performed for the HBnB REST API endpoints implemented in Part 2.  
-The goal is to confirm correct behavior for valid requests, correct rejection of invalid payloads, and consistent HTTP status codes.
+## 1) Objective
+Implement validation rules for all entities (User, Place, Review, Amenity),
+perform black-box testing using cURL and Swagger (Flask-RESTx),
+and provide automated unit tests to validate API behavior.
 
----
-
-## Environment
-- OS: Linux (Holberton Sandbox)
+## 2) Environment
+- OS: Linux (Sandbox)
 - Python: 3.x
 - Framework: Flask + Flask-RESTx
-- Storage: In-memory repositories
-- Base URL (manual tests): `http://127.0.0.1:5000/api/v1`
+- Storage: In-memory repository
+- Base URL: http://127.0.0.1:5000
+- Swagger URL: http://127.0.0.1:5000/api/v1/
 
----
+## 3) Implemented Validation (Business Logic Layer)
 
-## Swagger Documentation
-Swagger (Flask-RESTx) documentation was reviewed to confirm endpoints and schemas are exposed correctly:
+### 3.1 User Validation
+Rules:
+- first_name: required, non-empty
+- last_name: required, non-empty
+- email: required, non-empty, valid email format
 
-- URL: `http://127.0.0.1:5000/api/v1/`
+Expected behavior:
+- Invalid payload -> 400 Bad Request
 
----
+### 3.2 Place Validation
+Rules:
+- name (title): required, non-empty
+- price_per_night: must be >= 0
+- latitude: must be between -90 and 90
+- longitude: must be between -180 and 180
+- owner_id: required and must reference an existing User
 
-## Validation Rules Implemented
+Expected behavior:
+- Invalid payload -> 400 Bad Request
+- owner_id not found -> 404 Not Found
 
-### User
-- `first_name` required (non-empty)
-- `last_name` required (non-empty)
-- `email` required + must be valid format
-- `email` must be unique
+### 3.3 Review Validation
+Rules:
+- text: required, non-empty
+- rating: integer between 1 and 5
+- user_id: required and must reference an existing User
+- place_id: required and must reference an existing Place
 
-### Amenity
-- `name` required (non-empty)
+Expected behavior:
+- Invalid payload -> 400 Bad Request
+- user_id or place_id not found -> 404 Not Found
 
-### Place
-- `name` required (non-empty)
-- `price_per_night` must be >= 0
-- `latitude` must be between -90 and 90
-- `longitude` must be between -180 and 180
-- `owner_id` required and must reference an existing user
+### 3.4 Amenity Validation
+Rules:
+- name: required, non-empty
 
-### Review
-- `text` required (non-empty)
-- `rating` must be integer between 1 and 5
-- `user_id` must reference an existing user
-- `place_id` must reference an existing place
+Expected behavior:
+- Invalid payload -> 400 Bad Request
 
----
+## 4) Swagger Documentation Review (Flask-RESTx)
+Swagger was used as the reference for:
+- Available routes
+- Request schemas (required fields)
+- Response formats and status codes
 
-## Manual Black-Box Testing (cURL)
+Verified URL:
+- http://127.0.0.1:5000/api/v1/
 
-### Method
-Manual tests were executed using `curl`, validating:
-- Success paths (201 / 200 / 204)
-- Required fields missing
-- Boundary values (lat/long ranges, rating range)
-- Non-existent resources (404)
+Namespaces verified:
+- /users
+- /amenities
+- /places
+- /reviews
 
-### Results Summary (from `test_logs/`)
-The table below is generated from the saved curl outputs:
+## 5) Manual Black-Box Testing (cURL)
 
-| Test Case | Status | Response (first lines) |
-|---|---:|---|
-| `20260110_223435_amenity_create_invalid_empty` | 400 | === NAME === \| amenity_create_invalid_empty |
-| `20260110_223435_amenity_create_valid` | 201 | === NAME === \| amenity_create_valid |
-| `20260110_223435_amenity_get_not_found` | 404 | === NAME === \| amenity_get_not_found |
-| `20260110_223435_place_create_invalid_lat` | 400 | === NAME === \| place_create_invalid_lat |
-| `20260110_223435_place_create_invalid_missing_name` | 400 | === NAME === \| place_create_invalid_missing_name |
-| `20260110_223435_place_get_not_found` | 404 | === NAME === \| place_get_not_found |
-| `20260110_223435_review_create_invalid_missing_text` | 400 | === NAME === \| review_create_invalid_missing_text |
-| `20260110_223435_review_get_not_found` | 404 | === NAME === \| review_get_not_found |
-| `20260110_223435_swagger_get` | 200 | === NAME === \| swagger_get |
-| `20260110_223435_user_create_empty_first` | 400 | === NAME === \| user_create_empty_first |
-| `20260110_223435_user_create_invalid_email` | 400 | === NAME === \| user_create_invalid_email |
-| `20260110_223435_user_create_valid` | 201 | === NAME === \| user_create_valid |
-| `20260110_223435_user_get_not_found` | 404 | === NAME === \| user_get_not_found |
----
+### 5.1 Swagger Availability
+Request:
+- GET /api/v1/
 
-## Automated Testing (pytest)
+Expected:
+- 200 OK (Swagger UI page)
 
-Automated testing was implemented using pytest in combination with Flask test_client(), allowing the API to be tested without running an external server. This approach ensures isolated, repeatable, and fast execution of test cases. The test suite validates both successful and failing scenarios across all implemented resources, including Users, Amenities, Places, and Reviews.
+Result:
+- PASS (200 OK)
 
-The automated tests were executed using the following command:
+### 5.2 Users Endpoint Tests
+
+#### Create User (Valid)
+Request:
+- POST /api/v1/users/
+Payload:
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com"
+}
+
+Expected:
+- 201 Created
+
+Result:
+- PASS (201 Created)
+
+#### Create User (Invalid Email)
+Request:
+- POST /api/v1/users/
+Payload:
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "invalid"
+}
+
+Expected:
+- 400 Bad Request
+
+Result:
+- PASS (400 Bad Request)
+
+#### Create User (Empty first_name)
+Request:
+- POST /api/v1/users/
+Payload:
+{
+  "first_name": "",
+  "last_name": "Doe",
+  "email": "x@y.com"
+}
+
+Expected:
+- 400 Bad Request
+
+Result:
+- PASS (400 Bad Request)
+
+#### Get User (Not Found)
+Request:
+- GET /api/v1/users/does-not-exist
+
+Expected:
+- 404 Not Found
+
+Result:
+- PASS (404 Not Found)
+
+### 5.3 Amenities Endpoint Tests
+
+#### Create Amenity (Valid)
+Request:
+- POST /api/v1/amenities/
+Payload:
+{
+  "name": "WiFi"
+}
+
+Expected:
+- 201 Created
+
+Result:
+- PASS (201 Created)
+
+#### Create Amenity (Empty name)
+Request:
+- POST /api/v1/amenities/
+Payload:
+{
+  "name": ""
+}
+
+Expected:
+- 400 Bad Request
+
+Result:
+- PASS (400 Bad Request)
+
+#### Get Amenity (Not Found)
+Request:
+- GET /api/v1/amenities/does-not-exist
+
+Expected:
+- 404 Not Found
+
+Result:
+- PASS (404 Not Found)
+
+### 5.4 Places Endpoint Tests
+
+#### Create Place (Missing name/title)
+Request:
+- POST /api/v1/places/
+Payload:
+{
+  "description": "Test",
+  "price_per_night": 100,
+  "latitude": 0,
+  "longitude": 0,
+  "owner_id": "does-not-exist"
+}
+
+Expected:
+- 400 Bad Request
+
+Result:
+- PASS (400 Bad Request)
+
+#### Create Place (Invalid latitude)
+Request:
+- POST /api/v1/places/
+Payload:
+{
+  "name": "MyPlace",
+  "description": "Test",
+  "price_per_night": 100,
+  "latitude": 200,
+  "longitude": 0,
+  "owner_id": "does-not-exist"
+}
+
+Expected:
+- 400 Bad Request
+
+Result:
+- PASS (400 Bad Request)
+
+#### Get Place (Not Found)
+Request:
+- GET /api/v1/places/does-not-exist
+
+Expected:
+- 404 Not Found
+
+Result:
+- PASS (404 Not Found)
+
+### 5.5 Reviews Endpoint Tests
+
+#### Create Review (Missing text)
+Request:
+- POST /api/v1/reviews/
+Payload:
+{
+  "rating": 5,
+  "user_id": "does-not-exist",
+  "place_id": "does-not-exist"
+}
+
+Expected:
+- 400 Bad Request (schema validation / missing required field)
+
+Result:
+- PASS (400 Bad Request)
+
+#### Get Review (Not Found)
+Request:
+- GET /api/v1/reviews/does-not-exist
+
+Expected:
+- 404 Not Found
+
+Result:
+- PASS (404 Not Found)
+
+## 6) Automated Unit Tests (pytest)
+
+### 6.1 Method
+Automated tests were implemented using `pytest` with Flask `test_client()`.
+This approach tests the Flask application directly without requiring a running external server,
+resulting in fast, isolated, and repeatable test execution.
+
+### 6.2 Execution
+Command:
+```bash
 PYTHONPATH=hbnb python3 -m pytest -q
+## 6. Results
 
-All automated tests completed successfully, with a total of 16 test cases passing without errors.
+✅ All tests passed successfully.
 
-The test results confirm that the API consistently returns appropriate HTTP status codes and error messages. Requests targeting non-existent resources correctly return HTTP 404 Not Found responses using Flask-RESTx api.abort where applicable. Input validation is enforced through Flask-RESTx request schemas using @api.expect(..., validate=True), ensuring that malformed or incomplete payloads result in HTTP 400 Bad Request responses. The testing strategy does not require an external Flask server, which guarantees a clean testing environment and prevents side effects between test runs.
+**Total:** 16 passed
 
-In conclusion, the automated testing process verifies that the HBnB API behaves as expected and complies with the specifications defined in Task 6. Validation logic, error handling, and response consistency are correctly implemented at the model, service, and API layers. The successful execution of all test cases demonstrates that the API is stable, well-documented through Swagger, and ready for future extensions and integration in subsequent development phases.
+---
+
+## 6.3 Notes / Edge Cases
+
+- For non-existent resources, the API consistently returns **404 Not Found** with a clear error message,  
+  using Flask-RESTx `api.abort()` where applicable.
+
+- Request payload validation relies on Flask-RESTx schemas  
+  (`@api.expect(..., validate=True)`), ensuring that missing required fields return  
+  **400 Bad Request** responses.
+
+- No external Flask server is required during unit testing, ensuring stable, fast,  
+  and isolated test execution.
+
+---
+
+## 7. Conclusion
+
+Task 6 requirements were completed successfully:
+
+- Validation rules were implemented for **User**, **Place**, **Review**, and **Amenity** entities.
+- Swagger documentation was used to verify API routes and request/response schemas.
+- Manual black-box testing using **cURL** confirmed correct behavior and HTTP status codes.
+- Automated unit tests validated both valid and invalid scenarios, with all tests passing  
+  successfully (**16 passed**).
+
+Overall, the API endpoints behave as expected and consistently enforce validation rules.
+

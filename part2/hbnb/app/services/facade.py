@@ -22,8 +22,7 @@ class HBnBFacade:
         if not valid:
             return None, error
 
-        existing = self.get_user_by_email(user.email)
-        if existing:
+        if self.get_user_by_email(user.email):
             return None, "Email already exists"
 
         self.user_repo.add(user)
@@ -43,26 +42,31 @@ class HBnBFacade:
         if not user:
             return None, "User not found"
 
-        for key, value in (data or {}).items():
-            if hasattr(user, key):
-                setattr(user, key, (value.strip() if isinstance(value, str) else value))
+        if not data:
+            return None, "No input data provided"
+
+        if "first_name" in data:
+            user.first_name = (data.get("first_name") or "").strip()
+        if "last_name" in data:
+            user.last_name = (data.get("last_name") or "").strip()
+        if "email" in data:
+            new_email = (data.get("email") or "").strip()
+            if new_email != user.email and self.get_user_by_email(new_email):
+                return None, "Email already exists"
+            user.email = new_email
 
         valid, error = user.validate()
         if not valid:
             return None, error
 
-        other = self.get_user_by_email(user.email)
-        if other and other.id != user.id:
-            return None, "Email already exists"
-
         return user, None
 
     # ================= AMENITIES =================
-    def create_amenity(self, amenity_data):
-        if not amenity_data:
+    def create_amenity(self, data):
+        if not data:
             return None, "No input data provided"
 
-        amenity = Amenity(**amenity_data)
+        amenity = Amenity(name=data.get("name", ""), is_active=data.get("is_active", True))
         valid, error = amenity.validate()
         if not valid:
             return None, error
@@ -81,9 +85,11 @@ class HBnBFacade:
         if not amenity:
             return None, "Amenity not found"
 
-        for key, value in (data or {}).items():
-            if hasattr(amenity, key):
-                setattr(amenity, key, (value.strip() if isinstance(value, str) else value))
+        if not data:
+            return None, "No input data provided"
+
+        if "name" in data:
+            amenity.name = (data.get("name") or "").strip()
 
         valid, error = amenity.validate()
         if not valid:
@@ -93,16 +99,12 @@ class HBnBFacade:
 
     # ================= PLACES =================
     def create_place(self, place_data):
-        if not place_data:
-            return None, "No input data provided"
-
-        place = Place(**place_data)
+        place = Place(**(place_data or {}))
         valid, error = place.validate()
         if not valid:
             return None, error
 
-        owner = self.get_user(place.owner_id)
-        if not owner:
+        if not self.get_user(place.owner_id):
             return None, "Owner not found"
 
         self.place_repo.add(place)
@@ -119,7 +121,10 @@ class HBnBFacade:
         if not place:
             return None, "Place not found"
 
-        for key, value in (data or {}).items():
+        if not data:
+            return None, "No input data provided"
+
+        for key, value in data.items():
             if hasattr(place, key):
                 setattr(place, key, value)
 
@@ -127,8 +132,7 @@ class HBnBFacade:
         if not valid:
             return None, error
 
-        owner = self.get_user(place.owner_id)
-        if not owner:
+        if not self.get_user(place.owner_id):
             return None, "Owner not found"
 
         return place, None
@@ -138,43 +142,21 @@ class HBnBFacade:
         if not data:
             return None, "No input data provided"
 
-        text = data.get("text")
-        rating = data.get("rating")
-        user_id = data.get("user_id")
-        place_id = data.get("place_id")
-
-        if text is None or not isinstance(text, str) or not text.strip():
-            return None, "Text is required"
-
-        if rating is None:
-            return None, "Rating is required"
-        if not isinstance(rating, int) or rating < 1 or rating > 5:
-            return None, "Rating must be between 1 and 5"
-
-        if not user_id or not isinstance(user_id, str):
-            return None, "User ID is required"
-
-        if not place_id or not isinstance(place_id, str):
-            return None, "Place ID is required"
-
-        user = self.get_user(user_id)
-        if not user:
-            return None, "User not found"
-
-        place = self.get_place(place_id)
-        if not place:
-            return None, "Place not found"
-
         review = Review(
-            user_id=user_id,
-            place_id=place_id,
-            text=text.strip(),
-            rating=rating
+            user_id=data.get("user_id"),
+            place_id=data.get("place_id"),
+            text=data.get("text"),
+            rating=data.get("rating"),
         )
 
         valid, error = review.validate()
         if not valid:
             return None, error
+
+        if not self.get_user(review.user_id):
+            return None, "User not found"
+        if not self.get_place(review.place_id):
+            return None, "Place not found"
 
         self.review_repo.add(review)
         return review, None
@@ -186,12 +168,10 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        place = self.get_place(place_id)
-        if not place:
+        if not self.get_place(place_id):
             return None, "Place not found"
-
-        reviews = [r for r in self.review_repo.get_all() if getattr(r, "place_id", None) == place_id]
-        return reviews, None
+        reviews = self.review_repo.get_all()
+        return [r for r in reviews if getattr(r, "place_id", None) == place_id], None
 
     def update_review(self, review_id, data):
         review = self.get_review(review_id)
@@ -202,16 +182,9 @@ class HBnBFacade:
             return None, "No input data provided"
 
         if "text" in data:
-            text = data.get("text")
-            if text is None or not isinstance(text, str) or not text.strip():
-                return None, "Text is required"
-            review.text = text.strip()
-
+            review.text = data.get("text")
         if "rating" in data:
-            rating = data.get("rating")
-            if not isinstance(rating, int) or rating < 1 or rating > 5:
-                return None, "Rating must be between 1 and 5"
-            review.rating = rating
+            review.rating = data.get("rating")
 
         valid, error = review.validate()
         if not valid:
@@ -220,10 +193,7 @@ class HBnBFacade:
         return review, None
 
     def delete_review(self, review_id):
-        review = self.get_review(review_id)
-        if not review:
+        if not self.get_review(review_id):
             return False, "Review not found"
-
         self.review_repo.delete(review_id)
         return True, None
-

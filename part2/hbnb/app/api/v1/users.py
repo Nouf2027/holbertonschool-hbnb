@@ -22,6 +22,7 @@ user_out = api.model("UserOut", {
     "email": fields.String,
 })
 
+
 @api.route("/")
 class UserList(Resource):
     @api.marshal_list_with(user_out, code=200)
@@ -32,13 +33,11 @@ class UserList(Resource):
     @api.expect(user_in, validate=True)
     @api.marshal_with(user_out, code=201)
     def post(self):
-        data = api.payload
-
-        user, error = facade.create_user(data)
+        user, error = facade.create_user(api.payload)
         if error:
             api.abort(400, error)
-
         return user.to_dict(), 201
+
 
 @api.route("/<string:user_id>")
 class UserResource(Resource):
@@ -52,12 +51,9 @@ class UserResource(Resource):
     @api.expect(user_update, validate=True)
     @api.marshal_with(user_out, code=200)
     def put(self, user_id):
-        data = api.payload
-
-        updated, error = facade.update_user(user_id, data)
+        user, error = facade.update_user(user_id, api.payload)
         if error:
-            if error == "User not found":
+            if "not found" in error.lower():
                 api.abort(404, error)
             api.abort(400, error)
-
-        return updated.to_dict(), 200
+        return user.to_dict(), 200
