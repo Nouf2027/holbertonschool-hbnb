@@ -61,36 +61,101 @@ class HBnBFacade:
 
         return place, None
 
-    # ================= REVIEWS =================
+       # ================= REVIEWS =================
     def create_review(self, data):
         if not data:
             return None, "No input data provided"
 
-        if "text" not in data or not data["text"].strip():
+        # Required fields
+        text = data.get("text")
+        rating = data.get("rating")
+        user_id = data.get("user_id")
+        place_id = data.get("place_id")
+
+        if text is None or not isinstance(text, str) or not text.strip():
             return None, "Text is required"
 
-        if "rating" not in data:
+        if rating is None:
             return None, "Rating is required"
-
-        rating = data["rating"]
         if not isinstance(rating, int) or rating < 1 or rating > 5:
             return None, "Rating must be between 1 and 5"
 
-        if "user_id" not in data:
+        if not user_id or not isinstance(user_id, str):
             return None, "User ID is required"
 
-        if "place_id" not in data:
+        if not place_id or not isinstance(place_id, str):
             return None, "Place ID is required"
 
+        
+        user = self.get_user(user_id)
+        if not user:
+            return None, "User not found"
+
+        place = self.get_place(place_id)
+        if not place:
+            return None, "Place not found"
+
         review = Review(
-            user_id=data["user_id"],
-            place_id=data["place_id"],
-            text=data["text"],
+            user_id=user_id,
+            place_id=place_id,
+            text=text.strip(),
             rating=rating
         )
-
         self.review_repo.add(review)
         return review, None
 
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        return self.review_repo.get_all()
+
     def get_reviews_by_place(self, place_id):
-        return self.review_repo.get_all_by_attribute("place_id", place_id)
+        
+        place = self.get_place(place_id)
+        if not place:
+            return None, "Place not found"
+
+        reviews = self.review_repo.get_all_by_attribute("place_id", place_id)
+        return reviews, None
+
+    def update_review(self, review_id, data):
+        review = self.get_review(review_id)
+        if not review:
+            return None, "Review not found"
+
+        if not data:
+            return None, "No input data provided"
+
+       
+        if "text" in data:
+            text = data.get("text")
+            if text is None or not isinstance(text, str) or not text.strip():
+                return None, "Text is required"
+            review.text = text.strip()
+
+        if "rating" in data:
+            rating = data.get("rating")
+            if not isinstance(rating, int) or rating < 1 or rating > 5:
+                return None, "Rating must be between 1 and 5"
+            review.rating = rating
+
+        
+        return review, None
+
+    def delete_review(self, review_id):
+        review = self.get_review(review_id)
+        if not review:
+            return False, "Review not found"
+
+      
+        if hasattr(self.review_repo, "delete"):
+            self.review_repo.delete(review_id)
+        elif hasattr(self.review_repo, "remove"):
+            self.review_repo.remove(review_id)
+        else:
+           
+            if hasattr(self.review_repo, "_storage") and isinstance(self.review_repo._storage, dict):
+                self.review_repo._storage.pop(review_id, None)
+
+        return True, None
