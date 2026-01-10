@@ -1,0 +1,17 @@
+=== reviews_post_invalid_missing_text ===
+CMD: curl -i -X POST 'http://127.0.0.1:5000/api/v1/reviews/' -H "Content-Type: application/json" -d '{"rating":5,"user_id":"fake-user","place_id":"fake-place"}'
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    94  100    36  100    58  17183  27684 --:--:-- --:--:-- --:--:-- 94000
+HTTP/1.1 400 BAD REQUEST
+Server: Werkzeug/3.1.5 Python/3.10.12
+Date: Sat, 10 Jan 2026 20:25:47 GMT
+Content-Type: application/json
+Content-Length: 36
+Connection: close
+
+{
+    "error": "Text is required"
+}
+

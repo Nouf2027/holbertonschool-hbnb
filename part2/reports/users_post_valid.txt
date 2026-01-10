@@ -1,0 +1,20 @@
+=== users_post_valid ===
+CMD: curl -i -X POST 'http://127.0.0.1:5000/api/v1/users/' -H "Content-Type: application/json" -d '{"first_name":"John","last_name":"Doe","email":"john.doe@example.com"}'
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   210  100   140  100    70  36439  18219 --:--:-- --:--:-- --:--:-- 70000
+HTTP/1.1 201 CREATED
+Server: Werkzeug/3.1.5 Python/3.10.12
+Date: Sat, 10 Jan 2026 20:25:47 GMT
+Content-Type: application/json
+Content-Length: 140
+Connection: close
+
+{
+    "id": "dc18873c-e9b1-4946-b9a8-2d02ab95ff09",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com"
+}
+

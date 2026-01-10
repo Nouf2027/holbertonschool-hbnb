@@ -1,0 +1,76 @@
+[2026-01-10T20:22:52Z] BASE=http://127.0.0.1:5000
+[2026-01-10T20:22:52Z] Swagger check: http://127.0.0.1:5000/api/v1/
+[2026-01-10T20:22:52Z] RUN swagger
+[2026-01-10T20:22:52Z] OK  swagger (saved reports/swagger.txt)
+[2026-01-10T20:22:52Z] PLACES tests
+[2026-01-10T20:22:52Z] RUN places_post_valid
+[2026-01-10T20:22:53Z] OK  places_post_valid (saved reports/places_post_valid.txt)
+[2026-01-10T20:22:53Z] RUN places_post_invalid_missing_title
+[2026-01-10T20:22:53Z] OK  places_post_invalid_missing_title (saved reports/places_post_invalid_missing_title.txt)
+[2026-01-10T20:22:53Z] RUN places_get_all
+[2026-01-10T20:22:53Z] OK  places_get_all (saved reports/places_get_all.txt)
+[2026-01-10T20:22:53Z] RUN places_get_not_found
+[2026-01-10T20:22:53Z] OK  places_get_not_found (saved reports/places_get_not_found.txt)
+[2026-01-10T20:22:53Z] RUN places_put_not_found
+[2026-01-10T20:22:53Z] OK  places_put_not_found (saved reports/places_put_not_found.txt)
+[2026-01-10T20:22:53Z] REVIEWS tests
+[2026-01-10T20:22:53Z] RUN reviews_post_invalid_missing_text
+[2026-01-10T20:22:53Z] OK  reviews_post_invalid_missing_text (saved reports/reviews_post_invalid_missing_text.txt)
+[2026-01-10T20:22:53Z] RUN reviews_post_invalid_rating_out_of_range
+[2026-01-10T20:22:53Z] OK  reviews_post_invalid_rating_out_of_range (saved reports/reviews_post_invalid_rating_out_of_range.txt)
+[2026-01-10T20:22:53Z] RUN reviews_get_all
+[2026-01-10T20:22:53Z] OK  reviews_get_all (saved reports/reviews_get_all.txt)
+[2026-01-10T20:22:53Z] RUN reviews_get_not_found
+[2026-01-10T20:22:53Z] OK  reviews_get_not_found (saved reports/reviews_get_not_found.txt)
+[2026-01-10T20:22:53Z] RUN reviews_put_not_found
+[2026-01-10T20:22:53Z] OK  reviews_put_not_found (saved reports/reviews_put_not_found.txt)
+[2026-01-10T20:22:53Z] RUN reviews_delete_not_found
+[2026-01-10T20:22:53Z] OK  reviews_delete_not_found (saved reports/reviews_delete_not_found.txt)
+[2026-01-10T20:22:53Z] PLACE REVIEWS tests
+[2026-01-10T20:22:53Z] RUN place_reviews_place_not_found
+[2026-01-10T20:22:53Z] OK  place_reviews_place_not_found (saved reports/place_reviews_place_not_found.txt)
+[2026-01-10T20:22:53Z] Users endpoint seems available (status=200). Trying full success flow for reviews.
+[2026-01-10T20:22:53Z] RUN users_post_valid
+[2026-01-10T20:22:53Z] OK  users_post_valid (saved reports/users_post_valid.txt)
+[2026-01-10T20:22:54Z] RUN places_post_valid_for_review
+[2026-01-10T20:22:54Z] OK  places_post_valid_for_review (saved reports/places_post_valid_for_review.txt)
+[2026-01-10T20:22:54Z] Missing USER_ID or PLACE_ID; skipping review success flow.
+[2026-01-10T20:22:54Z] DONE
+[2026-01-10T20:25:46Z] BASE=http://127.0.0.1:5000
+[2026-01-10T20:25:46Z] Swagger check: http://127.0.0.1:5000/api/v1/
+[2026-01-10T20:25:46Z] RUN swagger
+[2026-01-10T20:25:46Z] OK  swagger (saved reports/swagger.txt)
+[2026-01-10T20:25:46Z] PLACES tests
+[2026-01-10T20:25:46Z] RUN places_post_valid
+[2026-01-10T20:25:46Z] OK  places_post_valid (saved reports/places_post_valid.txt)
+[2026-01-10T20:25:46Z] RUN places_post_invalid_missing_title
+[2026-01-10T20:25:46Z] OK  places_post_invalid_missing_title (saved reports/places_post_invalid_missing_title.txt)
+[2026-01-10T20:25:46Z] RUN places_get_all
+[2026-01-10T20:25:46Z] OK  places_get_all (saved reports/places_get_all.txt)
+[2026-01-10T20:25:46Z] RUN places_get_not_found
+[2026-01-10T20:25:46Z] OK  places_get_not_found (saved reports/places_get_not_found.txt)
+[2026-01-10T20:25:46Z] RUN places_put_not_found
+[2026-01-10T20:25:47Z] OK  places_put_not_found (saved reports/places_put_not_found.txt)
+[2026-01-10T20:25:47Z] REVIEWS tests
+[2026-01-10T20:25:47Z] RUN reviews_post_invalid_missing_text
+[2026-01-10T20:25:47Z] OK  reviews_post_invalid_missing_text (saved reports/reviews_post_invalid_missing_text.txt)
+[2026-01-10T20:25:47Z] RUN reviews_post_invalid_rating_out_of_range
+[2026-01-10T20:25:47Z] OK  reviews_post_invalid_rating_out_of_range (saved reports/reviews_post_invalid_rating_out_of_range.txt)
+[2026-01-10T20:25:47Z] RUN reviews_get_all
+[2026-01-10T20:25:47Z] OK  reviews_get_all (saved reports/reviews_get_all.txt)
+[2026-01-10T20:25:47Z] RUN reviews_get_not_found
+[2026-01-10T20:25:47Z] OK  reviews_get_not_found (saved reports/reviews_get_not_found.txt)
+[2026-01-10T20:25:47Z] RUN reviews_put_not_found
+[2026-01-10T20:25:47Z] OK  reviews_put_not_found (saved reports/reviews_put_not_found.txt)
+[2026-01-10T20:25:47Z] RUN reviews_delete_not_found
+[2026-01-10T20:25:47Z] OK  reviews_delete_not_found (saved reports/reviews_delete_not_found.txt)
+[2026-01-10T20:25:47Z] PLACE REVIEWS tests
+[2026-01-10T20:25:47Z] RUN place_reviews_place_not_found
+[2026-01-10T20:25:47Z] OK  place_reviews_place_not_found (saved reports/place_reviews_place_not_found.txt)
+[2026-01-10T20:25:47Z] Users endpoint seems available (status=200). Trying full success flow for reviews.
+[2026-01-10T20:25:47Z] RUN users_post_valid
+[2026-01-10T20:25:47Z] OK  users_post_valid (saved reports/users_post_valid.txt)
+[2026-01-10T20:25:47Z] RUN places_post_valid_for_review
+[2026-01-10T20:25:47Z] OK  places_post_valid_for_review (saved reports/places_post_valid_for_review.txt)
+[2026-01-10T20:25:47Z] Missing USER_ID or PLACE_ID; skipping review success flow.
+[2026-01-10T20:25:47Z] DONE
