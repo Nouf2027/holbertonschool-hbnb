@@ -1,17 +1,0 @@
-=== places_post_invalid_missing_title ===
-CMD: curl -i -X POST 'http://127.0.0.1:5000/api/v1/places/' -H "Content-Type: application/json" -d '{"description":"No title","price":100,"latitude":24.7,"longitude":46.6,"owner_id":"fake-owner-id"}'
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   134  100    36  100    98  20044  54565 --:--:-- --:--:-- --:--:--  130k
-HTTP/1.1 400 BAD REQUEST
-Server: Werkzeug/3.1.5 Python/3.10.12
-Date: Sat, 10 Jan 2026 20:25:46 GMT
-Content-Type: application/json
-Content-Length: 36
-Connection: close
-
-{
-    "error": "Name is required"
-}
-

@@ -1,17 +1,0 @@
-=== places_put_not_found ===
-CMD: curl -i -X PUT 'http://127.0.0.1:5000/api/v1/places/does-not-exist' -H "Content-Type: application/json" -d '{"title":"X"}'
-
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100    48  100    35  100    13  18479   6863 --:--:-- --:--:-- --:--:-- 48000
-HTTP/1.1 400 BAD REQUEST
-Server: Werkzeug/3.1.5 Python/3.10.12
-Date: Sat, 10 Jan 2026 20:25:47 GMT
-Content-Type: application/json
-Content-Length: 35
-Connection: close
-
-{
-    "error": "Place not found"
-}
-
