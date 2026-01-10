@@ -2,7 +2,7 @@ from app.models.base_model import BaseModel
 
 class User(BaseModel):
     def __init__(self, **kwargs):
-        # لا نمرر kwargs للـ BaseModel
+       
         super().__init__()
 
         self.first_name = kwargs.get("first_name", "").strip()
