@@ -157,7 +157,5 @@ From the `part2/` directory:
 ```bash
 python3 hbnb/run.py
 
-```bash
-pip3 install -r hbnb/requirements.txt
-python3 hbnb/run.py
+
 
