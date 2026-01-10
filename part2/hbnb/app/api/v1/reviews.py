@@ -54,13 +54,14 @@ class ReviewItem(Resource):
 
     def put(self, review_id):
         data = request.get_json()
-        review = facade.update_review(review_id, data)
-        if not review:
-            return {"error": "Review not found"}, 404
+        review, error = facade.update_review(review_id, data)
+        if error:
+            return {"error": error}, 400
         return {"message": "Review updated successfully"}, 200
 
     def delete(self, review_id):
-        deleted = facade.delete_review(review_id)
+        deleted, error = facade.delete_review(review_id)
         if not deleted:
-            return {"error": "Review not found"}, 404
+            return {"error": error}, 404
         return {"message": "Review deleted successfully"}, 200
+
