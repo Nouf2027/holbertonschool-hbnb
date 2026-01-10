@@ -9,8 +9,13 @@ class BaseModel:
 
     def update(self, data):
         for key, value in data.items():
-            if key in ("id", "created_at"):
-                continue
             if hasattr(self, key):
                 setattr(self, key, value)
         self.updated_at = datetime.utcnow()
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "created_at": self.created_at.isoformat(),
+            "updated_at": self.updated_at.isoformat()
+        }

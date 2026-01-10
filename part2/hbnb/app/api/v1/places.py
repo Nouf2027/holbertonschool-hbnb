@@ -1,11 +1,8 @@
-
-
 from flask_restx import Namespace, Resource
 from flask import request
-from app.services.facade import HBnBFacade
+from app.services import facade
 
 api = Namespace("places", description="Places endpoints")
-facade = HBnBFacade()
 
 @api.route("/")
 class PlaceList(Resource):
@@ -34,3 +31,21 @@ class PlaceItem(Resource):
         if error:
             return {"error": error}, 400
         return place.to_dict(), 200
+
+
+@api.route("/<place_id>/reviews")
+class PlaceReviewList(Resource):
+    def get(self, place_id):
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        reviews = facade.get_reviews_by_place(place_id)
+        return [
+            {
+                "id": r.id,
+                "text": r.text,
+                "rating": r.rating,
+                "user_id": r.user_id
+            } for r in reviews
+        ], 200

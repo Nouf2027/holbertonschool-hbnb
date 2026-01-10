@@ -1,15 +1,15 @@
-
-
 from app.persistence.repository import InMemoryRepository
 from app.models.user import User
 from app.models.place import Place
+from app.models.review import Review
 
 class HBnBFacade:
     def __init__(self):
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
 
-    # Users
+    # ================= USERS =================
     def create_user(self, user_data):
         user = User(**user_data)
         self.user_repo.add(user)
@@ -31,7 +31,7 @@ class HBnBFacade:
         user.update(data)
         return user
 
-    # Places
+    # ================= PLACES =================
     def create_place(self, place_data):
         place = Place(**place_data)
         valid, error = place.validate()
@@ -60,3 +60,37 @@ class HBnBFacade:
             return None, error
 
         return place, None
+
+    # ================= REVIEWS =================
+    def create_review(self, data):
+        if not data:
+            return None, "No input data provided"
+
+        if "text" not in data or not data["text"].strip():
+            return None, "Text is required"
+
+        if "rating" not in data:
+            return None, "Rating is required"
+
+        rating = data["rating"]
+        if not isinstance(rating, int) or rating < 1 or rating > 5:
+            return None, "Rating must be between 1 and 5"
+
+        if "user_id" not in data:
+            return None, "User ID is required"
+
+        if "place_id" not in data:
+            return None, "Place ID is required"
+
+        review = Review(
+            user_id=data["user_id"],
+            place_id=data["place_id"],
+            text=data["text"],
+            rating=rating
+        )
+
+        self.review_repo.add(review)
+        return review, None
+
+    def get_reviews_by_place(self, place_id):
+        return self.review_repo.get_all_by_attribute("place_id", place_id)

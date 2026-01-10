@@ -1,11 +1,19 @@
 from app.models.base_model import BaseModel
 
 class User(BaseModel):
-    def __init__(self, email, first_name, last_name, password=""):
+    def __init__(self, **kwargs):
+        # لا نمرر kwargs للـ BaseModel
         super().__init__()
-        self.email = email
-        self.first_name = first_name
-        self.last_name = last_name
-        self.password = password
-        self.places = []
-        self.reviews = []
+
+        self.first_name = kwargs.get("first_name", "").strip()
+        self.last_name = kwargs.get("last_name", "").strip()
+        self.email = kwargs.get("email", "").strip()
+
+    def to_dict(self):
+        data = super().to_dict()
+        data.update({
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email
+        })
+        return data
