@@ -25,8 +25,7 @@ def test_get_place_not_found(client):
     assert res.status_code == 404
 
 def test_create_review_invalid_missing_text(client):
-    # because you used @api.expect(validate=True) in reviews,
-    # missing "text" should fail at payload validation level => 400
+    
     res = client.post(f"{BASE}/reviews/", json={
         "rating": 5,
         "user_id": "invalid",
