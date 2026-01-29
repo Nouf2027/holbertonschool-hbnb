@@ -3,6 +3,9 @@ from flask_restx import Api
 from app.api.v1.users import api as users_api
 from app.api.v1.auth import api as auth_api
 from app.api.v1.protected import api as protected_api
+from api.v1.views.amenities import api as amenities_ns
+
+api.add_namespace(amenities_ns, path='/amenities')
 
 
 def init_api(app):
