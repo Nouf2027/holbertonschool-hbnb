@@ -77,11 +77,7 @@ class UserResource(Resource):
     @api.response(400, 'Invalid update')
 
 def put(self, user_id):
-  """
-        Update user:
-        - Admin: can update any user (including email/password)
-        - User: can update only himself (no email/password)
-        """
+
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
@@ -100,7 +96,35 @@ def put(self, user_id):
                 api.abort(404, error)
             api.abort(400, error)
         return user.to_dict(), 200
+          """
+        Update user:
+     Admin: can update any user (email,password)
+     User: can update only himself (no email,password)
+        """
 
+claims = get_jwt()
+        is_admin = claims.get('is_admin', False)
+        current_user_id = get_jwt_identity()
+
+        data = api.payload
+
+        # inflied admin  restrictions
+        if not is_admin:
+            if user_id != current_user_id:
+                return {'error': 'Unauthorized action'}, 403
+
+            if 'email' in data or 'password' in data:
+                return {'error': 'You cannot modify email or password.'}, 400
+
+# check Admin email  
+        if is_admin and 'email' in data:
+            existing_user = facade.get_user_by_email(data['email'])
+            if existing_user and existing_user.id != user_id:
+                return {'error': 'Email already registered'}, 400
+
+        user = facade.update_user(user_id, data)
+        if not user:
+            return {'error': 'User not found'}, 404
  # Admin password update
         if is_admin and 'password' in data:
             user.hash_password(data['password'])
