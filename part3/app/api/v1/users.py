@@ -4,6 +4,7 @@ from app.services import facade
 
 api = Namespace("users", description="User operations")
 
+# --- Models ---
 
 user_in = api.model("UserIn", {
     "first_name": fields.String(required=True),
@@ -12,11 +13,12 @@ user_in = api.model("UserIn", {
     "password": fields.String(required=True),  
 })
 
-
+# Model for user update ,Added password here so Admins can send it if needed
 user_update = api.model("UserUpdate", {
     "first_name": fields.String(required=False),
     "last_name": fields.String(required=False),
     "email": fields.String(required=False),
+     "password": fields.String(required=False), 
 })
 
 
@@ -25,6 +27,7 @@ user_out = api.model("UserOut", {
     "first_name": fields.String,
     "last_name": fields.String,
     "email": fields.String,
+
 })
 
 
@@ -32,7 +35,7 @@ user_created_out = api.model("UserCreatedOut", {
     "id": fields.String,
     "message": fields.String,
 })
-
+# --- Endpoints ---
 
 @api.route("/")
 class UserList(Resource):
