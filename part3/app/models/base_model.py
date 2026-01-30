@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Base model for all HBnB entities"""
+
 
 import uuid
 from datetime import datetime
