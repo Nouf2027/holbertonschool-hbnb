@@ -1,37 +1,77 @@
-from app.models.base_model import BaseModel
-from app import bcrypt
+#!/usr/bin/python3
 
+import re
+from app.models.base_model import BaseModel
+from app import db, bcrypt
+
+from sqlalchemy.orm import validates, relationship
 
 class User(BaseModel):
-    def __init__(self, **kwargs):
-        super().__init__()
+    __tablename__ = 'users'
 
-        self.first_name = kwargs.get("first_name", "").strip()
-        self.last_name = kwargs.get("last_name", "").strip()
-        self.email = kwargs.get("email", "").strip()
+    # --- Columns ---
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    is_admin = db.Column(db.Boolean, default=False)
+    
 
-        
-        self.password = None
+    password_hash = db.Column(db.String(128), nullable=False)
 
-        
-        if "password" in kwargs:
-            self.hash_password(kwargs.get("password"))
+    # --- Relationships ---
+    places = relationship(
+        "Place",
+        backref="owner",
+        lazy="select",
+        cascade="all, delete-orphan"
+    )
 
-    def hash_password(self, password):
-        """Hashes the password before storing it."""
-        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
+    reviews = relationship(
+        "Review",
+        backref="author",
+        lazy="select",
+        cascade="all, delete-orphan"
+    )
+
+    # --- Password Logic  ---
+    @property
+    def password(self):
+        """Prevents access to raw password"""
+        raise AttributeError('Password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        """Hashes password automatically when user.password = '...' is called"""
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def verify_password(self, password):
-        """Verifies if the provided password matches the hashed password."""
-        return bcrypt.check_password_hash(self.password, password)
+        """Checks if password matches the hash"""
+        return bcrypt.check_password_hash(self.password_hash, password)
 
-    def to_dict(self):
-        data = super().to_dict()
-        data.update({
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "email": self.email
-        })
+    # --- Validators ---
+    @validates('first_name')
+    def validate_first_name(self, key, value):
+        if not value or not isinstance(value, str):
+            raise ValueError("first_name must be a non-empty string")
+        if len(value) > 50:
+            raise ValueError("first_name must be at most 50 characters")
+        return value
 
-        return data
+    @validates('last_name')
+    def validate_last_name(self, key, value):
+        if not value or not isinstance(value, str):
+            raise ValueError("last_name must be a non-empty string")
+        if len(value) > 50:
+            raise ValueError("last_name must be at most 50 characters")
+        return value
 
+    @validates('email')
+    def validate_email(self, key, value):
+        if not value or not isinstance(value, str):
+            raise ValueError("email must be a non-empty string")
+
+        email_pattern = r"^[^@\s]+@[^@\s]+\.[^@\s]+$"
+        if not re.match(email_pattern, value):
+            raise ValueError("email must be a valid email address")
+
+        return value.lower()
