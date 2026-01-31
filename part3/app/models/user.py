@@ -4,7 +4,8 @@ import re
 from app.models.base_model import BaseModel
 from app import db, bcrypt
 
-from sqlalchemy.orm import validates, relationship
+from sqlalchemy.orm import validates
+
 
 class User(BaseModel):
     __tablename__ = 'users'
@@ -14,23 +15,24 @@ class User(BaseModel):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     is_admin = db.Column(db.Boolean, default=False)
-    
 
     password_hash = db.Column(db.String(128), nullable=False)
 
     # --- Relationships ---
-    places = relationship(
+    places = db.relationship(
         "Place",
-        backref="owner",
+        back_populates="owner",
         lazy="select",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        passive_deletes=True
     )
 
-    reviews = relationship(
+    reviews = db.relationship(
         "Review",
-        backref="author",
+        back_populates="author",
         lazy="select",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
+        passive_deletes=True
     )
 
     # --- Password Logic  ---
