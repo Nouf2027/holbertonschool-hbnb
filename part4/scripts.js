@@ -62,7 +62,11 @@ function displayPlaces(places) {
     card.dataset.price = String(price);
 
     card.innerHTML = `
-      <h2>${escapeHtml(place.name || "Unnamed place")}</h2>
+      <h2>
+        <a href="place.html?id=${place.id}">
+          ${escapeHtml(place.name || "Unnamed place")}
+        </a>
+      </h2>
       <p>${escapeHtml(place.description || "")}</p>
       <p><strong>Price per night:</strong> ${price}</p>
       <p><strong>Latitude:</strong> ${place.latitude ?? ""}</p>
