@@ -1,59 +1,15 @@
-from flask_restx import Namespace, Resource, fields
-from app.services import facade
+from flask_restx import Api
 
-api = Namespace("users", description="User operations")
+from app.api.v1.amenities import api as amenities_ns
+from app.api.v1.places import api as places_ns
+from app.api.v1.users import api as users_ns
 
-user_in = api.model("UserIn", {
-    "first_name": fields.String(required=True),
-    "last_name": fields.String(required=True),
-    "email": fields.String(required=True),
-})
+api = Api(
+    title="HBnB API",
+    version="1.0",
+    description="HBnB REST API"
+)
 
-user_update = api.model("UserUpdate", {
-    "first_name": fields.String(required=False),
-    "last_name": fields.String(required=False),
-    "email": fields.String(required=False),
-})
-
-user_out = api.model("UserOut", {
-    "id": fields.String,
-    "first_name": fields.String,
-    "last_name": fields.String,
-    "email": fields.String,
-})
-
-
-@api.route("/")
-class UserList(Resource):
-    @api.marshal_list_with(user_out, code=200)
-    def get(self):
-        users = facade.get_all_users()
-        return [u.to_dict() for u in users], 200
-
-    @api.expect(user_in, validate=True)
-    @api.marshal_with(user_out, code=201)
-    def post(self):
-        user, error = facade.create_user(api.payload)
-        if error:
-            api.abort(400, error)
-        return user.to_dict(), 201
-
-
-@api.route("/<string:user_id>")
-class UserResource(Resource):
-    @api.marshal_with(user_out, code=200)
-    def get(self, user_id):
-        user = facade.get_user(user_id)
-        if not user:
-            api.abort(404, "User not found")
-        return user.to_dict(), 200
-
-    @api.expect(user_update, validate=True)
-    @api.marshal_with(user_out, code=200)
-    def put(self, user_id):
-        user, error = facade.update_user(user_id, api.payload)
-        if error:
-            if "not found" in error.lower():
-                api.abort(404, error)
-            api.abort(400, error)
-        return user.to_dict(), 200
+api.add_namespace(users_ns, path="/api/v1/users")
+api.add_namespace(amenities_ns, path="/api/v1/amenities")
+api.add_namespace(places_ns, path="/api/v1/places")
