@@ -1,44 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Review</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="images/icon.png" type="image/png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Review</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="images/icon.png" type="image/png" />
 </head>
 <body>
-    <header>
-        <img src="images/logo.png" alt="HBnB Logo" class="logo">
-        <nav>
-            <a href="index.html">Home</a>
-        </nav>
-    </header>
+  <header>
+    <img src="images/logo.png" alt="HBnB Logo" class="logo" />
+    <nav>
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
 
-    <main>
-        <form id="review-form" class="form">
-            <h2>Add a Review</h2>
-            
-            <label for="review">Your Review:</label>
-            <textarea id="review" name="review" rows="5" required></textarea>
-            
-            <label for="rating">Rating:</label>
-            <select id="rating" name="rating" required>
-                <option value="5">5 - Excellent</option>
-                <option value="4">4 - Very Good</option>
-                <option value="3">3 - Good</option>
-                <option value="2">2 - Fair</option>
-                <option value="1">1 - Poor</option>
-            </select>
-            
-            <button type="submit" class="login-button">Submit Review</button>
-        </form>
-    </main>
+  <main class="place-details">
+    <section class="add-review" id="add-review">
+      <h2>Add a Review</h2>
 
-    <footer>
-        <p>All rights reserved &copy; 2026 HBnB</p>
-    </footer>
+      <p id="msg" style="display:none;"></p>
 
-    <script src="scripts.js"></script>
+      <form id="review-form" class="form">
+        <label for="review-text">Review:</label>
+        <textarea id="review-text" name="review-text" required></textarea>
+
+        <label for="review-rating">Rating (1-5):</label>
+        <input id="review-rating" name="review-rating" type="number" min="1" max="5" value="5" required />
+
+        <button type="submit" class="login-button">Submit Review</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>All rights reserved &copy; 2026 HBnB</p>
+  </footer>
+
+  <script src="add_review.js"></script>
 </body>
 </html>
