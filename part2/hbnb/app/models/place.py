@@ -35,3 +35,17 @@ class Place(BaseModel):
             "owner_id": self.owner_id
         })
         return data
+
+def add_review(self, review):
+        """Add a review to this place"""
+        from app.models.review import Review
+        if not isinstance(review, Review):
+            raise ValueError("Review must be a Review instance")
+        self.reviews.append(review)
+
+    def add_amenity(self, amenity):
+        """Add an amenity to this place"""
+        if not isinstance(amenity, Amenity):
+            raise ValueError("Amenity must be an Amenity instance")
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
