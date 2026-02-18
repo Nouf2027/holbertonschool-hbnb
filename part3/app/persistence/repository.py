@@ -1,46 +1,72 @@
-from app import db
-from app.persistence.repository import IRepository  
+from typing import Any, Dict
 
-class SQLAlchemyRepository(IRepository):
+
+class SQLAlchemyRepository:
     def __init__(self, model):
-        """
-This class, known as a 'model' (such as user, location), needs to know which table to interact with.
-        """
+        """Generic repository using SQLAlchemy models."""
         self.model = model
 
-    def add(self, obj):
-        """Adding a new element to the database """
+    def add(self, obj: Any):
+        from app import db
         db.session.add(obj)
         db.session.commit()
         return obj
 
-    def get(self, obj_id):
-        """ "Retrieve an item by ID""""
-
+    def get(self, obj_id: str):
+        from app import db
         return db.session.get(self.model, obj_id)
 
-
     def get_all(self):
-        """ Bring all the elements """
         return self.model.query.all()
 
-    def get_by_attribute(self, attr_name, attr_value):
-        """   Retrieve an item based on a specific condition (such as email) """
+    def get_by_attribute(self, attr_name: str, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
 
-    def update(self, obj_id, data):
-        """ Update element data """
+    def update(self, obj_id: str, data: Dict):
         obj = self.get(obj_id)
         if obj:
-            for key, value in data.items():
+            for key, value in (data or {}).items():
                 if hasattr(obj, key):
                     setattr(obj, key, value)
+            from app import db
             db.session.commit()
         return obj
 
-    def delete(self, obj_id):
-        """ delete item """
+    def delete(self, obj_id: str):
         obj = self.get(obj_id)
         if obj:
+            from app import db
             db.session.delete(obj)
             db.session.commit()
+
+
+class InMemoryRepository:
+    def __init__(self):
+        self.store = {}
+
+    def add(self, obj):
+        self.store[getattr(obj, 'id')] = obj
+        return obj
+
+    def get(self, obj_id):
+        return self.store.get(obj_id)
+
+    def get_all(self):
+        return list(self.store.values())
+
+    def get_by_attribute(self, attr_name, attr_value):
+        for obj in self.store.values():
+            if getattr(obj, attr_name, None) == attr_value:
+                return obj
+        return None
+
+    def update(self, obj_id, data):
+        obj = self.get(obj_id)
+        if obj:
+            for key, value in (data or {}).items():
+                if hasattr(obj, key):
+                    setattr(obj, key, value)
+        return obj
+
+    def delete(self, obj_id):
+        return self.store.pop(obj_id, None)

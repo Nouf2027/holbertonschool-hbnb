@@ -4,6 +4,40 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPriceFilterOptions();
   setupPriceFilterListener();
   checkAuthentication();
+
+  const loginForm = document.getElementById('login-form');
+  if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('http://127.0.0.1:5000/api/v1/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          alert(data.error || 'Login failed');
+          return;
+        }
+
+        const data = await res.json();
+        if (data && data.access_token) {
+          setCookie('token', data.access_token, 1);
+          window.location.href = 'index.html';
+        } else {
+          alert('Login response missing token');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Network error during login');
+      }
+    });
+  }
 });
 
 function getCookie(name) {
@@ -15,17 +49,27 @@ function getCookie(name) {
   return null;
 }
 
+function setCookie(name, value, days) {
+  let expires = '';
+  if (typeof days === 'number') {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = '; expires=' + d.toUTCString();
+  }
+  document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/';
+}
+
 function checkAuthentication() {
   const token = getCookie("token");
   const loginLink = document.getElementById("login-link");
 
   if (!token) {
-    loginLink.style.display = "block";
+    if (loginLink) loginLink.style.display = "block";
     clearPlaces();
     return;
   }
 
-  loginLink.style.display = "none";
+  if (loginLink) loginLink.style.display = "none";
   fetchPlaces(token);
 }
 

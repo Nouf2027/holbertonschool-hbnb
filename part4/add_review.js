@@ -56,10 +56,8 @@ function getPlaceIdFromURL() {
 async function submitReview(token, placeId, reviewText, rating) {
   try {
     const payload = {
-      user_id: token,
       place_id: placeId,
-      text: reviewText,
-      rating: rating,
+      text: reviewText
     };
 
     const res = await fetch(API_REVIEWS_URL, {
@@ -81,8 +79,12 @@ async function submitReview(token, placeId, reviewText, rating) {
       return;
     }
 
-    showMsg("Review submitted successfully!", true);
+    showMsg("Review submitted successfully! Redirecting...", true);
     document.getElementById("review-form").reset();
+    // Redirect to place page so the user sees the new review
+    setTimeout(() => {
+      window.location.href = `place.html?id=${placeId}`;
+    }, 800);
   } catch (e) {
     console.error(e);
     showMsg("Network error while submitting review.", false);

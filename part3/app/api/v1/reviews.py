@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask import request
 from app.services.facade import HBnBFacade
 
 api = Namespace('reviews', description='Review operations')
@@ -14,6 +15,26 @@ review_model = api.model('Review', {
 
 @api.route('/')
 class ReviewList(Resource):
+    def get(self):
+        """List reviews. Optional query param: ?place_id=<id>"""
+        place_id = request.args.get('place_id')
+        if place_id:
+            reviews, err = facade.get_reviews_by_place(place_id)
+            if err:
+                return {'error': err}, 404
+        else:
+            reviews = facade.get_all_reviews()
+
+        return [
+            {
+                'id': r.id,
+                'user_id': r.user_id,
+                'place_id': r.place_id,
+                'text': r.text,
+                'rating': getattr(r, 'rating', None)
+            }
+            for r in reviews
+        ], 200
 
     @jwt_required()
     @api.expect(review_model, validate=True)
@@ -31,21 +52,24 @@ class ReviewList(Resource):
         if not place:
             return {'error': 'Place not found'}, 404
 
-        # ❌ Regular user cannot review own place
+        # Regular user cannot review own place
         if not is_admin and place.owner_id == current_user_id:
             return {'error': 'You cannot review your own place.'}, 400
 
-        # ❌ Regular user cannot review same place twice
+        # Regular user cannot review same place twice
         if not is_admin:
             for review in facade.get_all_reviews():
                 if review.place_id == data['place_id'] and review.user_id == current_user_id:
                     return {'error': 'You have already reviewed this place.'}, 400
 
-        review = facade.create_review({
+        review, err = facade.create_review({
             'text': data['text'],
             'place_id': data['place_id'],
             'user_id': current_user_id
         })
+
+        if err:
+            return {'error': err}, 400
 
         return {
             'id': review.id,
